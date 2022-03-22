@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+ {{parent()}}
+    <script>
+    let type = document.querySelector("#type")
+    let gameName = document.querySelector("#gameName")
+    let category = document.querySelector("#category")
+    let author = document.querySelector("#author")
+    let players = document.querySelector("#players")
+    let selects = document.querySelectorAll("select")
+
+    $(function() {
+        $('#category, #author, #players, #gameName').on('change', function() {
+            let gameName = $("#gameName").val();
+            let category = $("#category").val();
+            let author = $('#author').val();
+            let players = $('#players').val();
+            let dataSet = {
+                game: gameName,
+                category: category,
+                author: author,
+                players: players
+            }
+            let games = sendData("game", dataSet)
+        })
+    })
+
+    function sendData(name, values){
+        $.ajax({
+            url: "/search",
+            method: "POST",
+            data: {"name": name, "values": values },
+            dataType: "json",
+            success: function(resp){console.log(resp)},
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")")
+                console.log(err.Message)
+            }
+        })
+    }
+
+    </script>
+{% endblock %}
+
+{% block title %}{{parent()}} - Recherche{% endblock %}
+
+{% block body %}
+
+<div class="multiform">
+    
+    <form action="/searchPiece" method="POST" class="form contact">
+        <p>Rechercher l'origine d'une pièce</p>
+        <div class="form align">
+            <label for="type">Type de pièce</label>
+            <select name="type" id="type">
+                <option value="0">--- Choisir ---</option>
+                {% for type in types %}
+                    <option value="{{type.id}}">{{type.type|capitalize}}</option>
+                {% endfor %}
+            </select>
+            <label for=""></label>
+            <input type="" name="">
+        </div>
+        <input type="submit" value="Rechercher">
+    </form>
+    
+    <form action="/searchGame" method="POST" class="form contact">
+        <p>Rechercher un jeu</p>
+        {{ form_start(gameForm) }}
+        <div class="form align">
+        <!--
+            {{form_label(gameForm.title, "Nom")}}
+            {{form_widget(gameForm.title, [])}}
+            {{form_label(gameForm.playerMin, "Joueurs")}}
+            {{form_widget(gameForm.playerMin, [])}}
+            {{form_label(gameForm.author, "Auteur")}}
+            {{form_widget(gameForm.author, [])}}
+            -->
+            <label for="gameName">Nom</label>
+            <input type="text" name="gameName" id="gameName">
+            <label for="category">Catégorie</label>
+            <select name="category" id="category">
+                <option value=0>--- Choisir ---</option>
+                {% for cat in categories %}
+                    <option value="{{cat.id}}">{{cat.name|capitalize}}</option>
+                {% endfor %}
+            </select>
+            <label for="author">Auteur</label>
+            <select name="author" id="author">
+                <option value=0>--- Choisir ---</option>
+                {% for author in authors %}
+                    <option value="{{author.id}}">{{author}}</option>
+                {% endfor %}
+            </select>
+            <label for="players">Nombre de joueurs</label>
+            <select name="players" id="players">
+                <option value=0>--- Choisir ---</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>plus de 8</option>
+            </select>
+            
+        </div>
+        <input type="submit" value="Rechercher">
+        <!--{{ form_rest(gameForm) }}
+        {{ form_end(gameForm) }}-->
+    </form>
+</div>
+<template class="itemCard" data-link="/game/details/">
+    <figure>
+        <img src= alt=>
+        <figcaption>
+            <p class="title"></p>
+        </figcaption>
+    </figure>
+</template>
+
+{% endblock %}

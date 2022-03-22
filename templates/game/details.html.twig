@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Détails de {{game.title}}{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    {% if( app.user ) %}
+        <script>
+            const addbtn = document.querySelector("#addbtn")
+            const addComment = document.querySelector("#addComment")
+            const commentForm = document.querySelector("#commentForm")
+            const rangeInput = document.querySelector('#comment_rate')
+            const numberInput = document.querySelector('#ratevalue')
+
+            function handleInputChange(e) {
+                let target = e.target
+                const min = target.min
+                const max = target.max
+                const val = target.value
+            }
+
+            rangeInput.addEventListener('input', handleInputChange)
+            numberInput.addEventListener('input', handleInputChange)
+
+            function modifyBtn(btn){
+                btn.innerHTML = "Dans ma collection"
+            }
+
+            addbtn.addEventListener("click", (event)=>{
+                $.ajax({
+                    url: "/addown/{{game.id}}",
+                    method: "POST",
+                    data: {"userId": {{app.user.id}} },
+                    dataType: "json",
+                    success: modifyBtn(event.target),
+                    error: function(xhr, status, error) {
+                        var err = eval("(" + xhr.responseText + ")")
+                        console.table(err)
+                    }
+                })
+            })
+
+            addComment.addEventListener("click", ()=>{
+                commentForm.classList.toggle("active")
+                console.log(addComment.innerText)
+                if( addComment.innerText == "Ajouter une évaluation" ){
+                    addComment.innerText = "Annuler"
+                }else{
+                    addComment.innerText = "Ajouter une évaluation"
+                }
+            })
+        </script>
+    {% endif %}
+{% endblock %}
+{% block body %}
+
+<div class="title banner">
+    <h2>{{game.title}} <span>({{game.yearOut}})</span></h2>
+    
+</div>
+<div class="gameDetail">
+    <div>
+        <img src={{game.image}} alt="photo de {{game.title}}">
+    </div>
+    <div>
+        <p>Catégorie{% if game.categories is iterable %}s{% endif %} : 
+            {% for cat in game.categories %}
+                <span class="category">
+                    {{cat}}
+                </span>
+            {% endfor %}
+            </p>
+        <p>Pour {{game.playerMin}} à {{game.playerMax}} joueurs</p>
+        <p>Durée : {{game.duration}} minutes environ</p>
+        <h4>Description du jeu</h4>
+        <p>{{game.description}}</p>
+    </div>
+    <div>
+        {% if app.user %}
+            <button class="btn" id="addbtn">
+                {% if game.inCollection(app.user) %}
+                    Dans ma collection
+                {% else %}
+                    Ajouter à ma collection
+                {% endif %}
+            </button>
+        {% endif %}
+    </div>
+</div>
+<div class="gameContent">
+    <p>Contenu du jeu :</p>
+    <ul>
+        {% for content in game.gameContents %}
+            <li>
+                {{content.quantity}}
+                {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                {{content.component.name}} 
+                ({{content.color}})
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="gameInfos">
+    <div class="card">
+        <p>Auteur</P>
+        <p>{{game.author}}</P>
+    </div>
+    <div class="card">
+        <p>Illustrateur</P>
+        <p>{{game.illustrator}}</P>
+    </div>
+    <div class="card">
+        <p>Editeur</P>
+        <p>{{game.editor}}</P>
+    </div>
+    <div class="card">
+        <p>Distributeur</P>
+        <p>{{game.distributor}}  </P>
+    </div>
+</div>
+<div class="comments">
+    <p>Commentaires et notes sur le jeu</p>
+    <div class="comment">
+        {% if game.comments is not empty %}
+            {% for comment in game.comments %}
+                <div class="commentInfos">
+                    <div>
+                        <a href="/user/details/{{comment.user.id}}">{{comment.user}} </a>
+                        <p> Note : <strong>{{comment.rate}}</strong>/10</p>
+                    </div>
+                    <p>le {{comment.date|date("d/m/Y \à h:i")}}</p>
+                </div>
+                <p class="commentText">{{comment.feedback}}</p>
+            {% endfor %}
+        {% else %}
+            <p>Il n'y a pas encore de commentaires pour ce jeu</p>
+        {% endif %}
+    </div>
+    {% if app.user %}
+        <div class="form center">
+            <button class="btn" id="addComment">Ajouter une évaluation</button>
+        </div>
+        <div id="commentForm">
+            {{ form_start(commentForm) }}
+            <div class="form contact">
+                <div class="form align">
+
+                    {{form_label(commentForm.rate, "Note ")}}
+                    <div class="range">
+                    {{form_widget(commentForm.rate, [])}}
+                    <input type="number" min="0" max="10" id="ratevalue" oninput="comment_rate.value=value" value="5"></input>
+                    </div>
+
+                </div>
+                {{form_label(commentForm.feedback, "Commentaire")}}
+                <div class="form center">
+                    {{form_widget(commentForm.feedback, [])}}
+                    <button type="submit" class="btn contact">Envoyer</button>
+                </div>
+            </div>
+            {{form_widget(commentForm.date, {"value" : "now"|date("Y-m-d\\TH:i:s") } ) }}
+            {{ form_rest(commentForm) }}
+            {{ form_end(commentForm) }}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,297 @@
+*{
+    box-sizing: border-box;
+}
+/*Mise en place de la palette de couleur initiale*/
+:root{
+    --main-xxclear: rgb(217, 244, 252);
+    --main-xclear: rgb(76,201,240);
+    --main-clear: rgb(72,149,239);
+    --main-middle: rgb(67,97,238);
+    --main-dark: rgb(63,55,201);
+    --main-xdark: rgb(58,12,163); 
+    --main-xxdark: rgb(20, 4, 58);
+}
+
+body{
+    margin: 0;
+}                    
+
+.extWrapper{
+    width: 100vw;
+    padding: 0 10px;
+    background-color: var(--main-xxdark);
+    color: var(--main-xxdark);
+}
+.intWrapper{
+    max-width: 1200px;  
+    margin: auto;
+}
+.bodyWrapper{
+    min-height: 90vh;
+    padding: 20px;
+    background-color: var(--main-xxclear);
+}
+a{
+    color: var(--main-xxdark);
+    font-weight: bold;
+}
+ul{
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+li:before{
+    content: "> ";
+}
+/*Special Header / menu */
+header{
+    display: flex;
+    justify-content: space-between;
+    color: var(--main-xclear);
+    padding: 5px 1em;
+}
+.logo.noun{
+    display: flex;
+    align-items: center;
+}
+.logo.noun a{
+    margin: 0;
+    text-decoration: none;
+    font-weight: normal;
+    color: var(--main-xclear)
+}
+.PFlogo{
+    width: 30px;
+    height: 30px;
+}
+.PFlogo img{
+    height: 100%;
+    object-fit: contain;
+}
+
+.headerMenu{
+    display: flex;
+    align-items: center;
+}
+/*affichage des cards de jeux ou pièces*/
+.gallery{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+.itemCard{
+    border: 1px solid var(--main-dark);
+    border-radius: 5px;
+    padding-bottom: 2.5em;
+}
+.itemCard:hover{
+    cursor: pointer;
+}
+.itemCard figure{
+    text-align: center;
+    height: 120px;
+    
+}
+figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+figure figcaption{
+    bottom: 0;
+}
+.title{
+    text-decoration: none;
+    color: var(--main-xdark);
+}
+.banner{
+    text-align: center;
+}
+/* Spécifique au pages de détail des jeux */
+.category{
+    display: inline-block;
+    background-color: var(--main-xdark);
+    border-radius: 5px;
+    color: var(--main-xclear);
+    margin: 0 2px;
+    padding: 2px 4px;
+}
+.gameDetail{
+    display: flex;
+    align-items: top;
+    justify-content: space-evenly;
+}
+.gameDetail div:nth-child(2){
+    width: 50%;
+    padding: 1em;
+}
+.gameDetail div:nth-child(3){
+    display: flex;
+    flex-direction: column;
+}
+.gameContent{
+    width: 75%;
+    margin: auto;
+}
+.gameInfos{
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    justify-content: space-evenly;
+}
+#addbtn{
+    width: 120px;
+}
+.card{
+    border: 1px solid var(--main-xdark);
+    box-shadow: 2px 5px 5px var(--main-dark);
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    width: 22%;
+}
+.card :nth-child(1){
+    font-size: 0.7em;
+    color: var(--main-dark);
+}
+.card :nth-child(n){
+    margin: 0;
+}
+.paragraphs p{
+    margin: 0.5em 1.5em;
+    text-align: justify;
+}
+.comments{
+    width: 75%;
+    margin: 1em auto;
+}
+.comment{
+    border: 1px solid var(--main-xxdark);
+    margin: 0.5em 0;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+.comment p, .comment a{
+    margin: 5px;
+}
+.commentInfos{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--main-xxdark);
+}
+.commentInfos strong{
+    font-size: 1.2em;
+}
+.commentInfos :nth-child(1){
+    display: inline-flex;
+}
+p.commentText{
+    margin-left: 2em; 
+}
+/*Specifique aux formulaires*/
+.informations{
+    margin: auto;
+    max-width: 500px;
+}
+.form{
+    margin: 0 auto;
+}
+.form.contact{
+    max-width: 500px;
+}
+.form.align{
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    align-items: center;
+}
+.form.center{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: stretch;
+    align-items: flex-end;
+}
+input, select, textarea{
+    border-radius: 5px;
+    padding: 5px 8px;
+    border-width: 2px;
+    border-style: inset;
+    margin: 1em 0;
+}
+textarea{
+    width: 100%;
+    resize: vertical;
+}
+#addComment{
+    display: block;
+}
+#commentForm{
+    display: none;
+}
+#commentForm.active{
+    display: block;
+}
+.range{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+input[type="range"]{
+    width: 70%;
+}
+input[type="number"]{
+    width: 3em;
+    padding: 3px;
+}
+.btn{
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid var(--main-xclear);
+    border-style: outset;
+    margin: 1em;
+}
+.btn.contact{
+    width: 40%;
+    background-color: var(--main-clear);
+    color: var(--main-xxdark);
+    margin-right: 1em;
+}
+.btn:hover{
+    border-style: inset;
+}
+/*Recherche*/
+.multiform{
+    display: flex;
+}
+.multiform .form.contact{
+    width: 100%;
+}
+.multiform input, .multiform select, .multiform textarea{
+    margin: 0.5em 1em 0.5em 0;
+}
+
+/*Spécial footer*/
+footer{
+    max-width: 1200px;
+    width: 100%;
+    background-color: var(--main-xxdark);
+    color: var(--main-xxclear);
+    display: flex;
+    justify-content: space-between;
+}
+.infoSite{
+    display: flex;
+    align-items: center;
+}
+.infoSite a, .headerMenu a{
+    display: inline-block;
+    margin: 0 1em;
+    text-decoration: none;
+    color: inherit;
+}
+footer p{
+    margin: 5px 1em;
+}

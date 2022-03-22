@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Accueil{% endblock %}
+
+{% block body %}
+
+<div class="title banner">
+    <h1>Titre H1</h1>
+    <h2>Titre H2</h2>
+    <h3>Titre H3</h3>
+    <h4>Titre H4</h4>
+</div>
+<div>
+{% if app.user %}
+    <p>Lorem ipsum dolor sit amet. Aut autem iste et quia doloremque aut excepturi iste! Non repellendus placeat quo iste exercitationem hic laborum omnis.</p>
+    <p>Est incidunt consequatur ut harum provident et autem voluptatibus eum cupiditate expedita sit facere quibusdam! Sed necessitatibus aperiam non obcaecati soluta sed tenetur voluptatem. Et atque ducimus id dolore voluptatem eos facilis placeat ab reiciendis dolorem.
+    Sit beatae debitis ut incidunt vero et soluta dolor et nihil voluptates nam voluptas tenetur in explicabo voluptas est fugit laboriosam. Qui impedit quia sit quia nihil et natus natus ut harum debitis ut nisi aliquid At facilis dolorem quo corrupti quis.</p>
+{% endif %}
+    <ul>
+        <li>liste01</li>
+        <li>liste02</li>
+        <li>liste03</li>
+        <li>liste04</li>
+        <li>liste05</li>
+    </ul>
+</div>
+<a href="/EveryGames">Voir tous les jeux</a>
+<div>
+<p>Icones font-Awesome</p>
+<i class="fa fa-dice-six"></i>
+<i class="fa fa-puzzle-piece"></i>
+<i class="fa fa-chess-rook"></i>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Contact{% endblock %}
+
+{% block body %}
+<div class="title banner">
+    <h2>Formulaire de contact</h2>
+</div>
+
+<div class="informations">
+    <p>Ici vous pouvez me laisser un message :</p>
+    <ul>
+        <li>A propos d'éventuels soucis de connexion à votre compte,</li>
+        <li>Si un jeu n'est pas présent et que vous y tenez beaucoup,</li>
+        <li>Si vous remarquez un dysfonctionnement quelconque sur le site,</li>
+        <li>Pour me remercier du travail accompli,</li>
+        <li>Et bien d'autres raisons,</li>
+    </ul>
+</div>
+
+<form action="/contact/send" method="POST" class="form contact">
+    <div class="form align"
+        <label for="email" >Email : </label>
+        <input type="email" name="email" id="email" placeholder="nom.prenom@exemple.fr">
+        <label for="subject">Sujet : </label>
+        <select name="subject" id="subject">
+            <option value=""> --- Merci de choisir un sujet --- </option>
+            <option value="other">Autres / Divers</option>
+            <option value="account">Compte et Connexion</option>
+            <option value="games">Jeux et Pièces</option>
+            <option value="suggest">Remarques et Suggestions</option>
+        </select>
+    </div>
+        <label for="message">Message : </label>
+    <div class="form center">
+        <textarea type="text" name="message" id="message" rows="10" placeholder="Ecrivez votre message ici"></textarea>
+        <input class="btn contact" type="submit" value="Envoyer le message">
+    </div>
+</form>
+
+
+{% endblock %}

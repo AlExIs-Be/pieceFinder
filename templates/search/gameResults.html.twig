@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Tous les jeux{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script>
+    let cards = document.querySelectorAll(".itemCard")
+    for( let card of cards ){
+        card.addEventListener("click", ()=>{
+            let link = card.dataset.link
+            window.location.href = link
+        })
+    }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <p>Resultat de la recherche</p>
+    {% if games is not empty %}
+        <section class="gallery">
+            {% for game in games %}
+            <div class="itemCard" data-link="/game/details/{{game.id}}">
+                <figure>
+                    <img src={{game.image}} alt={{game.title}}>
+                    <figcaption>
+                        <p class="title">{{game.title}}</p>
+                    </figcaption>
+                </figure>
+            </div>
+            {% endfor %}
+        </section>
+    {% else %}
+        <div>
+            <p>Pas de résultats</p> 
+        </div>
+    {% endif %}
+{% endblock %}

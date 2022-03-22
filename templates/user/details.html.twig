@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - {{user.pseudo}}{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script>
+    let cards = document.querySelectorAll(".itemCard")
+    for( let card of cards ){
+        card.addEventListener("click", ()=>{
+            let link = card.dataset.link
+            window.location.href = link
+        })
+    }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div>
+            <p>{{user.pseudo}}</p>
+            <p>{{user.about}}</p>
+        </div>
+        <h3 class='title banner'>Ma collection</h3>
+        <div class="gallery">
+            {% for game in user.owns %}
+                <div class="itemCard" data-link="/game/details/{{game.id}}">
+                    <figure>
+                        <img src={{game.image}} alt={{game.title}}>
+                        <figcaption>
+                            <p class="title">{{game.title}}</p>
+                        </figcaption>
+                    </figure>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
