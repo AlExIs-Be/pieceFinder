@@ -11,11 +11,9 @@
     --main-xdark: rgb(58,12,163); 
     --main-xxdark: rgb(20, 4, 58);
 }
-
 body{
     margin: 0;
-}                    
-
+}
 .extWrapper{
     width: 100vw;
     padding: 0 10px;
@@ -44,6 +42,11 @@ ul{
 li:before{
     content: "> ";
 }
+/*Affichage responsive*/
+i.mobile{
+    display: none;
+}
+
 /*Special Header / menu */
 header{
     display: flex;
@@ -123,14 +126,6 @@ figure figcaption{
     align-items: top;
     justify-content: space-evenly;
 }
-.gameDetail div:nth-child(2){
-    width: 50%;
-    padding: 1em;
-}
-.gameDetail div:nth-child(3){
-    display: flex;
-    flex-direction: column;
-}
 .gameContent{
     width: 75%;
     margin: auto;
@@ -139,7 +134,7 @@ figure figcaption{
     display: flex;
     flex-direction: row;
     align-items: top;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 #addbtn{
     width: 120px;
@@ -239,10 +234,10 @@ textarea{
     align-items: center;
     justify-content: space-evenly;
 }
-input[type="range"]{
+.range input[type="range"]{
     width: 70%;
 }
-input[type="number"]{
+.range input[type="number"]{
     width: 3em;
     padding: 3px;
 }
@@ -294,4 +289,31 @@ footer{
 }
 footer p{
     margin: 5px 1em;
+}
+/*Média query pour l'adaptation aux supports*/
+@media screen and (max-width: 850px){
+    .gallery{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media screen and (max-width: 600px) {
+    .desktop{
+        display: none;
+    }
+    i.mobile{
+        display: initial;
+    }
+}
+@media screen and (max-width: 550px) {
+    .gallery{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width: 400px) {
+    .logo.noun :nth-child(2){
+        display: none;
+    }
+    footer div p{
+        display: none;
+    }
 }

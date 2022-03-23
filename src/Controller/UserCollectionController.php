@@ -35,19 +35,17 @@ class UserCollectionController extends AbstractController
         ]);
     }
 
-/**
- * @Route("/addown/{id}", name="addown")
- */
-public function addown(Game $game, Request $request, UserRepository $urepo, ManagerRegistry $doc){
-$userId = $request->request->get("userId");
-$user = $urepo->find($userId);
-$collection = $user->getOwns();
-dd($collection);
-$coll = $user->addOwn($game);
-$man = $doc->getManager();
-$man->persist($coll);
-$man->flush();
-return $this->json(["reussi" => true]);
-}
+    /**
+     * @Route("/addown/{id}", name="addown")
+     */
+    public function addown(Game $game, Request $request, UserRepository $urepo, ManagerRegistry $doc){
+    $userId = $request->request->get("userId");
+    $user = $urepo->find($userId);
+    $coll = $user->addOwn($game);
+    $man = $doc->getManager();
+    $man->persist($coll);
+    $man->flush();
+    return $this->json(["reussi" => true]);
+    }
 
 }

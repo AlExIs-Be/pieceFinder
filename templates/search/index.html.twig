@@ -69,7 +69,7 @@
         <p>Rechercher un jeu</p>
         {{ form_start(gameForm) }}
         <div class="form align">
-        <!--
+            <!--
             {{form_label(gameForm.title, "Nom")}}
             {{form_widget(gameForm.title, [])}}
             {{form_label(gameForm.playerMin, "Joueurs")}}
@@ -94,23 +94,14 @@
                 {% endfor %}
             </select>
             <label for="players">Nombre de joueurs</label>
-            <select name="players" id="players">
-                <option value=0>--- Choisir ---</option>
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-                <option value=4>4</option>
-                <option value=5>5</option>
-                <option value=6>6</option>
-                <option value=7>7</option>
-                <option value=8>8</option>
-                <option value=9>plus de 8</option>
-            </select>
+            <input type="number" min="0" max="16" name="players" value="2"></input>
             
         </div>
         <input type="submit" value="Rechercher">
-        <!--{{ form_rest(gameForm) }}
-        {{ form_end(gameForm) }}-->
+        <!--
+        {{ form_rest(gameForm) }}
+        {{ form_end(gameForm) }}
+        -->
     </form>
 </div>
 <template class="itemCard" data-link="/game/details/">

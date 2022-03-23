@@ -62,28 +62,34 @@
         <img src={{game.image}} alt="photo de {{game.title}}">
     </div>
     <div>
-        <p>Catégorie{% if game.categories is iterable %}s{% endif %} : 
-            {% for cat in game.categories %}
-                <span class="category">
-                    {{cat}}
-                </span>
-            {% endfor %}
-            </p>
-        <p>Pour {{game.playerMin}} à {{game.playerMax}} joueurs</p>
-        <p>Durée : {{game.duration}} minutes environ</p>
-        <h4>Description du jeu</h4>
-        <p>{{game.description}}</p>
-    </div>
-    <div>
-        {% if app.user %}
-            <button class="btn" id="addbtn">
-                {% if game.inCollection(app.user) %}
-                    Dans ma collection
-                {% else %}
-                    Ajouter à ma collection
+        <div class="gameInfos">
+            <div>
+                <p>Catégorie{% if game.categories is iterable %}s{% endif %} : 
+                    {% for cat in game.categories %}
+                        <span class="category">
+                            {{cat}}
+                        </span>
+                    {% endfor %}
+                    </p>
+                <p>Pour {{game.playerMin}} à {{game.playerMax}} joueurs</p>
+                <p>Durée : {{game.duration}} minutes environ</p>
+            </div>
+            <div>
+                {% if app.user %}
+                    <button class="btn" id="addbtn">
+                        {% if game.inCollection(app.user) %}
+                            Dans ma collection
+                        {% else %}
+                            Ajouter à ma collection
+                        {% endif %}
+                    </button>
                 {% endif %}
-            </button>
-        {% endif %}
+            </div>
+        </div>
+        <div>
+            <h4>Description du jeu</h4>
+            <p>{{game.description}}</p>
+        </div>
     </div>
 </div>
 <div class="gameContent">
