@@ -9,6 +9,7 @@ use App\Entity\Author;
 use App\Form\GameType;
 use App\Entity\Comment;
 use App\Entity\Category;
+use App\Entity\Component;
 use App\Form\CommentType;
 use App\Entity\ComponentType;
 use Doctrine\ORM\EntityManager;
@@ -48,8 +49,6 @@ class PiecesLinkController extends AbstractController
             $comment->setGame($game);
             $em->persist($comment);
             $em->flush($comment);
-            $comment = new Comment();
-            $commentForm = $this->createForm(CommentType::class, $comment);
         }
         return $this->render("game/details.html.twig", [
             "game" => $game,
@@ -65,11 +64,13 @@ class PiecesLinkController extends AbstractController
         $ctman = $doc->getRepository(ComponentType::class);
         $catman = $doc->getRepository(Category::class);
         $autman = $doc->getRepository(Author::class);
+        $compman = $doc->getRepository(Component::class);
         
 
         $types = $ctman->findBy( array(), ["type" => "ASC"]);
         $cats = $catman->findBy( array(), ["name" => "ASC"]);
         $auts = $autman->findBy( array(), ["firstname" => "ASC"]);
+        $comps = $compman->findBy( array(), ["name" => "ASC"]);
 
         $game = new Game();
         $gameForm = $this->createForm(GameType::class, $game);
@@ -95,7 +96,8 @@ class PiecesLinkController extends AbstractController
             "categories" => $cats,
             "authors" => $auts,
             "gameForm" => $gameForm->createView(),
-            "games" => $games
+            "games" => $games,
+            "values" => $comps
         ]);
     }
 

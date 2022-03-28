@@ -19,13 +19,14 @@ body{
     padding: 0 10px;
     background-color: var(--main-xxdark);
     color: var(--main-xxdark);
+    overflow: hidden;
 }
 .intWrapper{
     max-width: 1200px;  
     margin: auto;
 }
 .bodyWrapper{
-    min-height: 90vh;
+    min-height: 95vh;
     padding: 20px;
     background-color: var(--main-xxclear);
 }
@@ -46,13 +47,15 @@ li:before{
 i.mobile{
     display: none;
 }
-
-/*Special Header / menu */
+/*=========================================
+    Header / Menu
+=========================================*/
 header{
     display: flex;
     justify-content: space-between;
     color: var(--main-xclear);
     padding: 5px 1em;
+    min-height: 2vh;
 }
 .logo.noun{
     display: flex;
@@ -61,7 +64,6 @@ header{
 .logo.noun a{
     margin: 0;
     text-decoration: none;
-    font-weight: normal;
     color: var(--main-xclear)
 }
 .PFlogo{
@@ -72,12 +74,45 @@ header{
     height: 100%;
     object-fit: contain;
 }
-
+.logo.noun .PFnoun{
+    margin: 0 0.7em;
+}
 .headerMenu{
     display: flex;
     align-items: center;
 }
-/*affichage des cards de jeux ou pièces*/
+/*=========================================
+    Page d'accueil
+=========================================*/
+.homeChoice{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.homeChoice + h1{
+    font-size: 3em;
+    margin: 0.3em;
+}
+p.banner{
+    width: 80%;
+    margin: auto;
+}
+.homeChoice img{
+    height: 150px;
+}
+.homeChoice a{
+    display: inline-block;
+    margin: 0.5em;
+}
+.homeChoice a:before{
+    content: "~ "
+}
+.homeChoice a:after{
+    content: " ~"
+}
+/*=========================================
+    Affichage des cards de jeux ou pièces
+=========================================*/
 .gallery{
     width: 100%;
     display: grid;
@@ -112,32 +147,58 @@ figure figcaption{
 .banner{
     text-align: center;
 }
-/* Spécifique au pages de détail des jeux */
+/*=========================================
+    Spécifique au pages de détail des jeux
+=========================================*/
 .category{
     display: inline-block;
     background-color: var(--main-xdark);
     border-radius: 5px;
     color: var(--main-xclear);
-    margin: 0 2px;
+    margin: 2px 2px;
     padding: 2px 4px;
 }
 .gameDetail{
     display: flex;
-    align-items: top;
+    align-items: center;
     justify-content: space-evenly;
-}
-.gameContent{
-    width: 75%;
-    margin: auto;
 }
 .gameInfos{
     display: flex;
     flex-direction: row;
-    align-items: top;
+    align-items: stretch;
     justify-content: space-between;
+}
+.miniature{
+    margin: 0 1em;
+    min-width: 250px;
+}
+.miniature img{
+    max-width: 100%;
+    object-fit: cover;
+}
+.text.center{
+    text-align: center;
 }
 #addbtn{
     width: 120px;
+}
+.gameContent{
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 80%;
+    margin-bottom: 1.3em;
+}
+.contentList{
+    margin: 0 1em;
+    width: 250px;
+}
+.gamePeople{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10%;
 }
 .card{
     border: 1px solid var(--main-xdark);
@@ -145,13 +206,12 @@ figure figcaption{
     border-radius: 5px;
     text-align: center;
     padding: 5px;
-    width: 22%;
 }
 .card :nth-child(1){
     font-size: 0.7em;
     color: var(--main-dark);
 }
-.card :nth-child(n){
+.card p{
     margin: 0;
 }
 .paragraphs p{
@@ -160,7 +220,7 @@ figure figcaption{
 }
 .comments{
     width: 75%;
-    margin: 1em auto;
+    margin: 2em auto 0;
 }
 .comment{
     border: 1px solid var(--main-xxdark);
@@ -177,7 +237,7 @@ figure figcaption{
     align-items: center;
     border-bottom: 1px solid var(--main-xxdark);
 }
-.commentInfos strong{
+strong{
     font-size: 1.2em;
 }
 .commentInfos :nth-child(1){
@@ -186,7 +246,41 @@ figure figcaption{
 p.commentText{
     margin-left: 2em; 
 }
-/*Specifique aux formulaires*/
+/*=========================================
+    Page de détail Utilisateur
+=========================================*/
+#infoBtn{
+    width: 175px;
+}
+.userCollection{
+    position: relative;
+}
+.userCollection .tip{
+    position: absolute;
+    background-color: var(--main-clear);
+    color: var(--main-dark);
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    left: 100px;
+    top: 15px;
+    width: fit-content;
+    visibility: hidden;
+}
+.userCollection i{
+    position: absolute;
+    top: 8px;
+    right: 5px;
+}
+.userCollection i:hover, i:hover + .tip{
+    cursor: pointer;
+    visibility: visible;
+    z-index: 1;
+}
+
+/*=========================================
+    Specifique aux formulaires
+=========================================*/
 .informations{
     margin: auto;
     max-width: 500px;
@@ -201,6 +295,10 @@ p.commentText{
     display: grid;
     grid-template-columns: 20% 1fr;
     align-items: center;
+}
+.form.w5050{
+    grid-template-columns: 150px 1fr;
+    text-align: right;
 }
 .form.center{
     display: flex;
@@ -220,14 +318,34 @@ textarea{
     width: 100%;
     resize: vertical;
 }
+label.required::after{
+    content:"*";
+    color: var(--main-xdark);
+}
 #addComment{
     display: block;
 }
 #commentForm{
-    display: none;
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: height 0.5s, opacity 1s;
+}
+.userInfos{
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: height 0.5s, opacity 1s;
+}
+.userInfos.active{
+    visibility: visible;
+    height: 630px;
+    opacity: 1;
 }
 #commentForm.active{
-    display: block;
+    visibility: visible;
+    height: 330px;
+    opacity: 1;
 }
 .range{
     display: flex;
@@ -248,6 +366,10 @@ textarea{
     border-style: outset;
     margin: 1em;
 }
+.right{
+    display: flex;
+    justify-content: flex-end;
+}
 .btn.contact{
     width: 40%;
     background-color: var(--main-clear);
@@ -257,7 +379,22 @@ textarea{
 .btn:hover{
     border-style: inset;
 }
-/*Recherche*/
+.address{
+    display: flex;
+    align-items: center;
+}
+.address input{
+    margin: 0 5px;
+}
+.address :nth-child(2){
+    width: 4em;
+}
+.address :nth-child(4){
+    flex: 1;
+}
+/*=========================================
+    Recherche
+=========================================*/
 .multiform{
     display: flex;
 }
@@ -267,8 +404,9 @@ textarea{
 .multiform input, .multiform select, .multiform textarea{
     margin: 0.5em 1em 0.5em 0;
 }
-
-/*Spécial footer*/
+/*=========================================
+    Footer
+=========================================*/
 footer{
     max-width: 1200px;
     width: 100%;
@@ -290,30 +428,56 @@ footer{
 footer p{
     margin: 5px 1em;
 }
-/*Média query pour l'adaptation aux supports*/
-@media screen and (max-width: 850px){
+/*=========================================
+    Média query pour l'adaptation aux supports
+=========================================*/
+@media only screen and (max-width: 850px){
     .gallery{
         grid-template-columns: repeat(3, 1fr);
     }
+    .gameContent{
+        /*flex-direction: column;*/
+    }
 }
-@media screen and (max-width: 600px) {
+@media only screen and (max-width: 650px) {
     .desktop{
         display: none;
     }
     i.mobile{
         display: initial;
     }
+    .gameDetail{
+        flex-wrap: wrap;
+    }
+    .gamePeople{
+        gap: 2em;
+    }
 }
-@media screen and (max-width: 550px) {
+@media only screen and (max-width: 550px) {
     .gallery{
         grid-template-columns: repeat(2, 1fr);
     }
+    .gamePeople{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .commentInfos{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    p.commentText{
+        margin: 0.5em ;
+    }
 }
-@media screen and (max-width: 400px) {
-    .logo.noun :nth-child(2){
-        display: none;
+@media only screen and (max-width: 400px) {
+    .itemCard figure{
+        width: 50%;
     }
     footer div p{
         display: none;
     }
+    .gameInfos{
+        flex-wrap: wrap-reverse;
+        justify-content: center;
+    }
+    
 }

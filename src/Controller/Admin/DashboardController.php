@@ -7,6 +7,7 @@ use App\Entity\Author;
 use App\Entity\Category;
 use App\Entity\Component;
 use App\Entity\GameContent;
+use App\Entity\ComponentType;
 use App\Controller\Admin\AuthorCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,11 +48,12 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::section('Dashboard', 'fa fa-cog');
-        yield MenuItem::linkToCrud('Auteurs', 'fa fa-user', Author::class);
         yield MenuItem::linkToCrud('Catégories', 'fa fa-folder-open', Category::class);
+        yield MenuItem::linkToCrud('Auteurs', 'fa fa-user', Author::class);
         yield MenuItem::linkToCrud('Jeux', 'fa fa-puzzle-piece', Game::class);
         yield MenuItem::linkToCrud('Contenus', 'fa fa-chess-rook', GameContent::class);
         yield MenuItem::linkToCrud('Pièces', 'fa fa-chess-rook', Component::class);
+        yield MenuItem::linkToCrud('Types', 'fa fa-cog', ComponentType::class);
         yield MenuItem::linkToRoute('Retour à l\'accueil', 'fa fa-home', "home");
     }
 }

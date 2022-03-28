@@ -46,6 +46,12 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
+    public function testsearch($name, $cat, $auth, $plays){
+        $man = $this->getEntityManager();
+        if( $name != "" ){
+            $string = "g.title LIKE :title";
+        }
+    }
     public function searchWithAll($name,$cat,$auth,$plays){
         $man = $this->getEntityManager();
         $query = $man->createQuery(
@@ -63,7 +69,7 @@ class GameRepository extends ServiceEntityRepository
             "play" => $plays
         ]);
         $results = $query->getResult();
-        dd($query, $results);
+        //dd($query, $results);
         return $results;
     }
     public function searchWithAllButPlayers($name,$cat,$auth){
@@ -247,7 +253,7 @@ class GameRepository extends ServiceEntityRepository
         $query = $man->createQuery(
             "SELECT g
             FROM App\Entity\Game g
-            WHERE g.playerMin < :play"
+            WHERE g.playerMin <= :play"
         )->setParameter("play", $plays);
         $results = $query->getResult();
         //dd($query, $results);

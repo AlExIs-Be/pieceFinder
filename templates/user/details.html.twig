@@ -4,34 +4,123 @@
 {% block javascripts %}
     {{parent()}}
     <script>
-    let cards = document.querySelectorAll(".itemCard")
-    for( let card of cards ){
-        card.addEventListener("click", ()=>{
-            let link = card.dataset.link
-            window.location.href = link
-        })
-    }
+        let cards = document.querySelectorAll(".itemCard")
+
+        {% if app.user == user %}
+            let infoBtn = document.querySelector("#infoBtn")
+            let passwordBtn = document.querySelector("#passwordBtn")
+            let userInfos = document.querySelector(".userInfos")
+            let remove = document.querySelectorAll(".remove")
+
+            for( let rem of remove ){
+                rem.addEventListener("click", ()=>{
+                    let link = rem.dataset.link
+                    console.log(rem, link)
+                    $.ajax({
+                        url: link,
+                        method: "POST",
+                        dataType: "json",
+                        success: () =>{
+                            console.log("cc")
+                            window.location.href = "/user/details/{{user.id}}"
+                        }
+                    })
+                })
+            }
+            for( let card of cards ){
+                card.addEventListener("click", ()=>{
+                    let link = card.dataset.link
+                    window.location.href = link
+                })
+            }
+
+            infoBtn.addEventListener("click", ()=>{
+                userInfos.classList.toggle("active")
+                if( infoBtn.innerText == "Modifier mes informations" ){
+                    infoBtn.innerText = "Annuler"
+                }else{
+                    infoBtn.innerText = "Modifier mes informations"
+                }
+            })
+        {% endif %}
+
     </script>
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <div>
-            <p>{{user.pseudo}}</p>
-            <p>{{user.about}}</p>
-        </div>
-        <h3 class='title banner'>Ma collection</h3>
-        <div class="gallery">
-            {% for game in user.owns %}
-                <div class="itemCard" data-link="/game/details/{{game.id}}">
-                    <figure>
-                        <img src={{game.image}} alt={{game.title}}>
-                        <figcaption>
-                            <p class="title">{{game.title}}</p>
-                        </figcaption>
-                    </figure>
+        <section>
+            <h2 class="banner">Profil de {{user.pseudo}}</h2>
+            <p>A propos de moi</p>
+            <p>{{user.about|nl2br}}</p>
+            {% if app.user == user %}
+                <div class="right">
+                    <button class="btn" id="infoBtn">Modifier mes informations</button>
+                    {#}
+                    <button class="btn" id="passwordBtn">Changer mon mot de passe</button>
+                    {#}
                 </div>
-            {% endfor %}
-        </div>
+                <div class="userInfos">
+                    {{ form_start(userInfos) }}
+                        <div class="form contact">
+                            <div class="form align">
+
+                                {{form_label(userInfos.firstname, "Prénom")}}
+                                {{form_widget(userInfos.firstname, [])}}
+
+                                {{form_label(userInfos.lastname, "Nom")}}
+                                {{form_widget(userInfos.lastname, [])}}
+
+                                {{form_label(userInfos.pseudo, "Pseudo")}}
+                                {{form_widget(userInfos.pseudo, [])}}
+
+                                {{form_label(userInfos.email, "Email")}}
+                                {{form_widget(userInfos.email, [])}}
+
+                                {{form_label(userInfos.about, "A propos")}}
+                                {{form_widget(userInfos.about, [])}}
+                                
+                                <p>Adresse</p>
+                                <div>
+                                    <div class="address">
+                                        {{form_label(userInfos.addressNumber, "Numéro")}}
+                                        {{form_widget(userInfos.addressNumber, [])}}
+                                        {{form_label(userInfos.address, ", Rue")}}
+                                        {{form_widget(userInfos.address, [])}}
+                                    </div>
+                                    <div class="form align">
+                                        {{form_label(userInfos.city, "Ville")}}
+                                        {{form_widget(userInfos.city, [])}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form center">
+                                <button type="submit" class="btn contact">Enregistrer</button>
+                            </div>
+                        </div>
+                        {{ form_rest(userInfos) }}
+                    {{ form_end(userInfos) }}
+                </div>
+            {% endif %}
+        </section>
+        <section>
+            <h3 class='title banner'>Ma collection ({{ user.owns|length }} jeu{% if user.owns|length > 1 %}x{% endif %})</h3>
+            <div class="gallery">
+                {% for game in user.owns %}
+                    <div class="userCollection">
+                        <i class="remove fa-solid fa-circle-minus" data-link="/remove/{{game.id}}"></i>
+                        <p class="tip">Retirer de ma collection</p>
+                        <div class="itemCard" data-link="/game/details/{{game.id}}">
+                            <figure>
+                                <img src={{game.image}} alt={{game.title}}>
+                                <figcaption>
+                                    <p class="title">{{game.title}}</p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
     </div>
 {% endblock %}

@@ -3,13 +3,26 @@
 {% block javascripts %}
  {{parent()}}
     <script>
+
     let type = document.querySelector("#type")
+
     let gameName = document.querySelector("#gameName")
     let category = document.querySelector("#category")
     let author = document.querySelector("#author")
     let players = document.querySelector("#players")
-    let selects = document.querySelectorAll("select")
+    let searchGameForm = document.querySelector("#searchGame")
 
+    searchGameForm.addEventListener("submit", (e)=>{
+        e.preventDefault()
+        if( gameName.value == "" &&
+            category.value == 0 &&
+            author.value == 0 &&
+            players.value == 0){
+        }else{
+            searchGameForm.submit()
+        }
+    })
+    let selects = document.querySelectorAll("select")
     $(function() {
         $('#category, #author, #players, #gameName').on('change', function() {
             let gameName = $("#gameName").val();
@@ -25,7 +38,6 @@
             let games = sendData("game", dataSet)
         })
     })
-
     function sendData(name, values){
         $.ajax({
             url: "/search",
@@ -50,33 +62,53 @@
 <div class="multiform">
     
     <form action="/searchPiece" method="POST" class="form contact">
-        <p>Rechercher l'origine d'une pièce</p>
-        <div class="form align">
-            <label for="type">Type de pièce</label>
-            <select name="type" id="type">
+        <h3 class="banner">Rechercher l'origine d'une pièce</h3>
+        <div class="form align w5050">
+            <label class="required" for="type">Type de pièce</label>
+            <select name="type" id="type" required="required">
                 <option value="0">--- Choisir ---</option>
                 {% for type in types %}
                     <option value="{{type.id}}">{{type.type|capitalize}}</option>
                 {% endfor %}
             </select>
-            <label for=""></label>
-            <input type="" name="">
+            <label for="value">Valeur</label>
+            <select name="value" id="value">
+                <option value="0">--- Choisir ---</option>
+                {% for value in values|sort((a,b) => a.name <=> b.name) %} 
+                    <option value="{{value.id}}">{{value.name|capitalize}}</option>
+                {% endfor %}
+            </select>
+            <label for="material">Matière</label>
+            <select name="material" id="material">
+                <option value="0">--- Choisir ---</option>
+                <option value="bois">Bois</option>
+                <option value="carton">Carton</option>
+                <option value="papier">Papier</option>
+                <option value="plastique">Plastique</option>
+            </select>
+            <label for="color">Couleur</label>
+            <select name="color" id="color">
+                <option value="0">--- Choisir ---</option>
+                <option value="blanc">Blanc</option>
+                <option value="bleu">Bleu</option>
+                <option value="gris">Gris</option>
+                <option value="jaune">Jaune</option>
+                <option value="marron">Marron</option>
+                <option value="noir">Noir</option>
+                <option value="orange">Orange</option>
+                <option value="rouge">Rouge</option>
+                <option value="vert">Vert</option>
+                <option value="violet">Violet</option>
+            </select>
         </div>
-        <input type="submit" value="Rechercher">
+        <div class="form center">
+            <input class="btn" type="submit" value="Rechercher">
+        </div>
     </form>
     
-    <form action="/searchGame" method="POST" class="form contact">
-        <p>Rechercher un jeu</p>
-        {{ form_start(gameForm) }}
-        <div class="form align">
-            <!--
-            {{form_label(gameForm.title, "Nom")}}
-            {{form_widget(gameForm.title, [])}}
-            {{form_label(gameForm.playerMin, "Joueurs")}}
-            {{form_widget(gameForm.playerMin, [])}}
-            {{form_label(gameForm.author, "Auteur")}}
-            {{form_widget(gameForm.author, [])}}
-            -->
+    <form action="/searchGame" method="POST" class="form contact" id="searchGame">
+        <h3 class="banner">Rechercher un jeu</h3>
+        <div class="form align w5050">
             <label for="gameName">Nom</label>
             <input type="text" name="gameName" id="gameName">
             <label for="category">Catégorie</label>
@@ -94,14 +126,12 @@
                 {% endfor %}
             </select>
             <label for="players">Nombre de joueurs</label>
-            <input type="number" min="0" max="16" name="players" value="2"></input>
+            <input type="number" min="0" max="16" name="players" id="players"></input>
             
         </div>
-        <input type="submit" value="Rechercher">
-        <!--
-        {{ form_rest(gameForm) }}
-        {{ form_end(gameForm) }}
-        -->
+        <div class="form center">
+            <input class="btn" type="submit" value="Rechercher">
+        </div>
     </form>
 </div>
 <template class="itemCard" data-link="/game/details/">

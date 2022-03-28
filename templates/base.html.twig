@@ -12,27 +12,29 @@
     </head>
     <div class="extWrapper">
         <div class="intWrapper">
-            <header>
-                <div class="logo noun">
-                    <a href="/" class="PFlogo">
-                        <img src="{{asset("image/logoPF.png")}}" alt="logo">
-                    </a>
-                    <a href="/">PieceFinder</a> 
-                </div>
-                <div class="headerMenu">
-                    <nav class="headerMenu">
-                        <a href="/"><span class="desktop">Accueil</span><i class="fa-solid fa-house mobile"></i></a>
-                        <a href="/search"><span class="desktop">Rechercher</span><i class="mobile fa-solid fa-magnifying-glass"></i></a>
-                        {% if app.user %}
-                            <a href="/user/details/{{app.user.id}}"><span class="desktop">Mon Profil</span><i class="mobile fa-solid fa-id-card-clip"></i></a>
-                            <a href="/logout"><span class="desktop">Déconnexion</span><i class="mobile fa-solid fa-right-from-bracket"></i></a>
-                        {% else %}
-                            <a href="/register"><span class="desktop">S'inscrire</span><i class="mobile fa-solid fa-address-card"></i></a>
-                            <a href="/login"><span class="desktop">Connexion</span><i class="mobile fa-solid fa-right-to-bracket"></i></a>
-                        {% endif %}
-                    </nav>
-                </div>
-            </header>
+            {% block header %}
+                <header>
+                    <div class="logo noun">
+                        <a href="/" class="PFlogo">
+                            <img src="{{asset("image/logoPF.png")}}" alt="logo">
+                        </a>
+                        <a href="/" class="PFnoun"><span class="desktop">PieceFinder</span><i class="fa-solid fa-home mobile"></i></a> 
+                    </div>
+                    <div class="headerMenu">
+                        <nav class="headerMenu">
+                            <a href="/everyGames"><span class="desktop">Jeux</span><i class="fa-solid fa-chess-rook mobile"></i></a>
+                            <a href="/search"><span class="desktop">Rechercher</span><i class="mobile fa-solid fa-magnifying-glass"></i></a>
+                            {% if app.user %}
+                                <a href="/user/details/{{app.user.id}}"><span class="desktop">Mon Profil</span><i class="mobile fa-solid fa-id-card-clip"></i></a>
+                                <a href="/logout"><span class="desktop">Déconnexion</span><i class="mobile fa-solid fa-right-from-bracket"></i></a>
+                            {% else %}
+                                <a href="/register"><span class="desktop">S'inscrire</span><i class="mobile fa-solid fa-address-card"></i></a>
+                                <a href="/login"><span class="desktop">Connexion</span><i class="mobile fa-solid fa-right-to-bracket"></i></a>
+                            {% endif %}
+                        </nav>
+                    </div>
+                </header>
+            {% endblock %}
             <body>
                 <div class="bodyWrapper">
                     {% block body %}

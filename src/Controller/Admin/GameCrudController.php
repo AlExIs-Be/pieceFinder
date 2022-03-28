@@ -20,10 +20,12 @@ class GameCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
+            TextField::new('image'),
             IntegerField::new('playerMin'),
             IntegerField::new('playerMax'),
             IntegerField::new('ageMin'),
             IntegerField::new('duration'),
+            IntegerField::new('yearOut'),
             AssociationField::new('author'),
             AssociationField::new('categories'),
             TextEditorField::new('description')->hideOnIndex(),

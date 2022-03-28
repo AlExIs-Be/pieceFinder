@@ -2,40 +2,31 @@
 
 {% block title %}{{parent()}} - Accueil{% endblock %}
 
+{% block header %}<header></header>{% endblock %}
 {% block body %}
-
-<div class="title banner">
-    <h1>Titre H1</h1>
-    <h2>Titre H2</h2>
-    <h3>Titre H3</h3>
-    <h4>Titre H4</h4>
-</div>
-<div>
-{% if app.user %}
-    <p>Lorem ipsum dolor sit amet. Aut autem iste et quia doloremque aut excepturi iste! Non repellendus placeat quo iste exercitationem hic laborum omnis.</p>
-    <p>Est incidunt consequatur ut harum provident et autem voluptatibus eum cupiditate expedita sit facere quibusdam! Sed necessitatibus aperiam non obcaecati soluta sed tenetur voluptatem. Et atque ducimus id dolore voluptatem eos facilis placeat ab reiciendis dolorem.
-    Sit beatae debitis ut incidunt vero et soluta dolor et nihil voluptates nam voluptas tenetur in explicabo voluptas est fugit laboriosam. Qui impedit quia sit quia nihil et natus natus ut harum debitis ut nisi aliquid At facilis dolorem quo corrupti quis.</p>
-{% endif %}
-    <ul>
-        <li>liste01</li>
-        <li>liste02</li>
-        <li>liste03</li>
-        <li>liste04</li>
-        <li>liste05</li>
-    </ul>
-</div>
-<a href="/EveryGames">Voir tous les jeux</a>
-<div>
-<p>Icones font-Awesome</p>
-<i class="fa fa-dice-six"></i>
-<i class="fa fa-puzzle-piece"></i>
-<i class="fa fa-chess-rook"></i>
-<i class="fa-solid fa-address-card"></i>
-<i class="fa-solid fa-right-to-bracket"></i>
-<i class="fa-solid fa-right-from-bracket"></i>
-<i class="fa-solid fa-magnifying-glass"></i>
-<i class="fa-solid fa-house"></i>
-
-</div>
+<section>
+    <div class="homeChoice">
+        <img src="{{asset("image/logoPF.png")}}" alt="logo">
+    </div>
+    <h1 class="title banner">Bienvenue sur PieceFinder</h1>
+    <p class="banner">
+        Lorem ipsum dolor sit amet. Non dolores officia ab aliquid consequatur aut fugit accusantium est aperiam dignissimos ut sequi similique id sunt numquam ab natus inventore. At tenetur quia rem laudantium voluptas et alias tenetur ad atque eligendi sed ullam sunt.<br>
+        Et tenetur maxime non omnis laborum ad ipsa dignissimos a incidunt molestiae. Id dignissimos voluptatem ut officia voluptas id adipisci rerum ut quam asperiores ea iusto corrupti et Quis molestias. Rem neque praesentium ut accusamus consequuntur est possimus expedita ut labore doloribus.<br>
+        Eum dolor omnis sit perspiciatis voluptas sit quasi placeat. Et earum facere cum Quis sunt ut unde quia.
+    </p>
+    <br>
+    <h2 class="banner title">Que faire ?</h2>
+    <div class="homeChoice">
+        <a href="/everyGames">Voir tous les jeux</a>
+        <a href="/search">Chercher un jeu ou l'origine d'une pièce</a>
+        {% if app.user %}
+            <a href="/user/details/{{app.user.id}}">Voir mon profil</a>
+            <a href="/app_logout">Se déconnecter</a>
+        {% else %}
+            <a href="/app_register">Créer un compte</a>
+            <a href="/app_login">Se connecter</a>
+        {% endif %}
+    </div>
+</section>
 
 {% endblock %}

@@ -29,7 +29,6 @@
                 $.ajax({
                     url: "/addown/{{game.id}}",
                     method: "POST",
-                    data: {"userId": {{app.user.id}} },
                     dataType: "json",
                     success: modifyBtn(event.target),
                     error: function(xhr, status, error) {
@@ -41,7 +40,6 @@
 
             addComment.addEventListener("click", ()=>{
                 commentForm.classList.toggle("active")
-                console.log(addComment.innerText)
                 if( addComment.innerText == "Ajouter une évaluation" ){
                     addComment.innerText = "Annuler"
                 }else{
@@ -52,89 +50,246 @@
     {% endif %}
 {% endblock %}
 {% block body %}
-
-<div class="title banner">
-    <h2>{{game.title}} <span>({{game.yearOut}})</span></h2>
-    
-</div>
-<div class="gameDetail">
-    <div>
-        <img src={{game.image}} alt="photo de {{game.title}}">
+<section>
+    <div class="title banner">
+        <h2>{{game.title}} <span>({{game.yearOut}})</span></h2>
+        
     </div>
-    <div>
-        <div class="gameInfos">
-            <div>
-                <p>Catégorie{% if game.categories is iterable %}s{% endif %} : 
-                    {% for cat in game.categories %}
-                        <span class="category">
-                            {{cat}}
-                        </span>
-                    {% endfor %}
-                    </p>
-                <p>Pour {{game.playerMin}} à {{game.playerMax}} joueurs</p>
-                <p>Durée : {{game.duration}} minutes environ</p>
-            </div>
-            <div>
-                {% if app.user %}
-                    <button class="btn" id="addbtn">
-                        {% if game.inCollection(app.user) %}
-                            Dans ma collection
-                        {% else %}
-                            Ajouter à ma collection
-                        {% endif %}
-                    </button>
-                {% endif %}
-            </div>
+    <div class="gameDetail">
+        <div class="miniature">
+            <img src={{game.image}} alt="photo de {{game.title}}">
         </div>
         <div>
-            <h4>Description du jeu</h4>
-            <p>{{game.description}}</p>
+            <div class="gameInfos">
+                <div>
+                    <p>Catégorie{% if game.categories is iterable %}s{% endif %} : 
+                        {% for cat in game.categories %}
+                            <span class="category">
+                                {{cat}}
+                            </span>
+                        {% endfor %}
+                        </p>
+                    <p>Pour {{game.playerMin}} à {{game.playerMax}} joueurs</p>
+                    <p>Durée : {{game.duration}} minutes environ</p>
+                </div>
+                <div>
+                    <div class="text center">
+                        <p>Moyenne des utilisateurs<p>
+                        <p>
+                        {% if game.comments|filter(com => com.rate != NULL) is not empty %}
+                            {% set sumrate = 0 %}
+                            {% for comment in game.comments|filter(com => com.rate != NULL) %}
+                                {% set sumrate = sumrate + comment.rate %}
+                            {% endfor %}
+                            {% set average = sumrate / game.comments|filter(com => com.rate != NULL)|length %}
+                            <strong>{{average|round(1, "common")}}</strong> /10
+                        {% else %}
+                            Pas de note
+                        {% endif %}
+                        </p>
+                    </div>
+                    {% if app.user %}
+                        <button class="btn" id="addbtn">
+                            {% if game.inCollection(app.user) %}
+                                Dans ma collection
+                            {% else %}
+                                Ajouter à ma collection
+                            {% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <h4>Description du jeu</h4>
+                <p>{{game.description|raw}}</p>
+            </div>
         </div>
     </div>
-</div>
-<div class="gameContent">
-    <p>Contenu du jeu :</p>
-    <ul>
-        {% for content in game.gameContents %}
-            <li>
-                {{content.quantity}}
-                {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                {{content.component.name}} 
-                ({{content.color}})
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+</section>
+<section>
+    <h3 class="title banner">Contenu du jeu :</h3>
+    <div class="gameContent">
+    {% if game.gameContents|filter(c => c.componentType.type == "livret") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "livret") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "sac") is not empty %}
+        <div class="contentList">
+            <ul>
+                {% for content in game.gameContents|filter(c => c.componentType.type == "sac") %}   
+                    <li>
+                        {{content.quantity}}
+                        {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                        {{content.component.name}}
+                        {{content.name}}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "plateau") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "plateau") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}x{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "pièce") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "pièce") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "dé") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "dé") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                    ({{content.color}})
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "tuile") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "tuile") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "carte") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "carte") %}   
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.name}}
+                    {% if content.component.name is defined %}
+                        ({{content.component.name}})
+                    {% endif %}
+                    ({{content.color}})
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "figurine") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "figurine") %}                 
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {{content.component.name}}
+                    {{content.name}}
+                    ({{content.color}})
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if game.gameContents|filter(c => c.componentType.type == "jeton") is not empty %}
+    <div class="contentList">
+        <ul>
+            {% for content in game.gameContents|filter(c => c.componentType.type == "jeton") %}                 
+                <li>
+                    {{content.quantity}}
+                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                    {% if content.component.name is defined %}
+                        {{content.component.name}}
+                    {% endif %}
+                    {{content.name}}
+                    ({{content.color}})
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</section>
 
-<div class="gameInfos">
+<div class="gamePeople">
     <div class="card">
-        <p>Auteur</P>
-        <p>{{game.author}}</P>
+        <p>Auteur</p>
+        {% if game.author != NULL %}
+            <p>{{game.author}}</p>
+        {% else %}
+            <p>Inconnu</p>
+        {% endif %}
     </div>
     <div class="card">
-        <p>Illustrateur</P>
-        <p>{{game.illustrator}}</P>
+        <p>Illustrateur</p>
+        {% if game.illustrator != NULL %}
+            <p>{{game.illustrator}}</p>
+        {% else %}
+            <p>Inconnu</p>
+        {% endif %}
     </div>
     <div class="card">
-        <p>Editeur</P>
-        <p>{{game.editor}}</P>
+        <p>Editeur</p>
+        {% if game.editor != NULL %}
+            <p>{{game.editor}}</p>
+        {% else %}
+            <p>Inconnu</p>
+        {% endif %}
     </div>
     <div class="card">
-        <p>Distributeur</P>
-        <p>{{game.distributor}}  </P>
+        <p>Distributeur</p>
+        {% if game.distributor != NULL %}
+            <p>{{game.distributor}}</p>
+        {% else %}
+            <p>Inconnu</p>
+        {% endif %}
     </div>
 </div>
-<div class="comments">
+<section class="comments">
     <p>Commentaires et notes sur le jeu</p>
     <div class="comment">
         {% if game.comments is not empty %}
-            {% for comment in game.comments %}
+            {% for comment in game.comments|sort((a,b) => b.date <=> a.date) %}
                 <div class="commentInfos">
                     <div>
                         <a href="/user/details/{{comment.user.id}}">{{comment.user}} </a>
                         <p> Note : <strong>{{comment.rate}}</strong>/10</p>
                     </div>
-                    <p>le {{comment.date|date("d/m/Y \à h:i")}}</p>
+                    <p>le {{comment.date|date("d/m/Y \à H:i")}}</p>
                 </div>
                 <p class="commentText">{{comment.feedback}}</p>
             {% endfor %}
@@ -169,6 +324,6 @@
             {{ form_end(commentForm) }}
         </div>
     {% endif %}
-</div>
+</section>
 
 {% endblock %}

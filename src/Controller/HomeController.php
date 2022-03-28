@@ -20,11 +20,11 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/EveryGames", name="EveryGames")
+     * @Route("/everyGames", name="EveryGames")
      */
     public function home(GameRepository $repo): Response
     {
-        $games = $repo->findAll();
+        $games = $repo->findBy( [], ["yearOut" => "DESC"]);
         return $this->render("game/home.html.twig", [
             "games" => $games
         ]);
