@@ -46,12 +46,6 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
-    public function testsearch($name, $cat, $auth, $plays){
-        $man = $this->getEntityManager();
-        if( $name != "" ){
-            $string = "g.title LIKE :title";
-        }
-    }
     public function searchWithAll($name,$cat,$auth,$plays){
         $man = $this->getEntityManager();
         $query = $man->createQuery(

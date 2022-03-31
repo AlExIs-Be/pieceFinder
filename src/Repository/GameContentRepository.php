@@ -44,6 +44,37 @@ class GameContentRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
+    
+    public function findPieces($type, $value, $mat, $col){
+        $query = $this
+            ->createQueryBuilder("piece")
+            ->select( "piece", "ct")
+            ->join("piece.componentType", "ct");
+            //->join("gameContent.component", "c");
+        
+        if( $type ){
+            $query = $query
+                ->andWhere("piece.componentType = :id")
+                ->setParameter(":id", $type);
+        }
+        if( $value ){
+            $query = $query
+                ->andWhere("piece.component = :id")
+                ->setParameter(":id", $value);
+        }
+        if( $mat ){
+            $query = $query
+                ->andWhere("piece.material LIKE :mat")
+                ->setParameter(":mat", $mat);
+        }
+        if( $col ){
+            $query = $query
+                ->andWhere("piece.color LIKE :col")
+                ->setParameter(":col", $col);
+        }
+        return $query->getQuery()->getResult();
+
+    }
 
     // /**
     //  * @return GameContent[] Returns an array of GameContent objects

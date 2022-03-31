@@ -66,21 +66,21 @@
         <div class="form align w5050">
             <label class="required" for="type">Type de pièce</label>
             <select name="type" id="type" required="required">
-                <option value="0">--- Choisir ---</option>
+                <option disabled selected hidden>--- Choisir ---</option>
                 {% for type in types %}
                     <option value="{{type.id}}">{{type.type|capitalize}}</option>
                 {% endfor %}
             </select>
             <label for="value">Valeur</label>
-            <select name="value" id="value">
-                <option value="0">--- Choisir ---</option>
+            <select name="value" id="value" >
+                <option disabled selected hidden>--- Choisir ---</option>
                 {% for value in values|sort((a,b) => a.name <=> b.name) %} 
                     <option value="{{value.id}}">{{value.name|capitalize}}</option>
                 {% endfor %}
             </select>
             <label for="material">Matière</label>
             <select name="material" id="material">
-                <option value="0">--- Choisir ---</option>
+                <option disabled selected hidden>--- Choisir ---</option>
                 <option value="bois">Bois</option>
                 <option value="carton">Carton</option>
                 <option value="papier">Papier</option>
@@ -88,7 +88,7 @@
             </select>
             <label for="color">Couleur</label>
             <select name="color" id="color">
-                <option value="0">--- Choisir ---</option>
+                <option disabled selected hidden>--- Choisir ---</option>
                 <option value="blanc">Blanc</option>
                 <option value="bleu">Bleu</option>
                 <option value="gris">Gris</option>
@@ -113,14 +113,14 @@
             <input type="text" name="gameName" id="gameName">
             <label for="category">Catégorie</label>
             <select name="category" id="category">
-                <option value=0>--- Choisir ---</option>
+                <option disabled selected hidden>--- Choisir ---</option>
                 {% for cat in categories %}
                     <option value="{{cat.id}}">{{cat.name|capitalize}}</option>
                 {% endfor %}
             </select>
             <label for="author">Auteur</label>
             <select name="author" id="author">
-                <option value=0>--- Choisir ---</option>
+                <option disabled selected hidden>--- Choisir ---</option>
                 {% for author in authors %}
                     <option value="{{author.id}}">{{author}}</option>
                 {% endfor %}

@@ -1,6 +1,8 @@
 *{
     box-sizing: border-box;
 }
+
+
 /*Mise en place de la palette de couleur initiale*/
 :root{
     --main-xxclear: rgb(217, 244, 252);
@@ -194,6 +196,28 @@ figure figcaption{
 .contentList{
     margin: 0 1em;
     width: 250px;
+}
+.piece{
+    position: relative;
+}
+.imgHover{
+    display: block;
+    position: absolute;
+    left: -110px;
+    bottom: -55px;
+    margin: 5px;
+    visibility: hidden;
+    width: 100px;
+    height: 100px;
+}
+.imgHover img{
+    border: 1px solid var(--main-xxdark);
+    border-radius: 5px;
+    width: 100%;
+    object-fit: cover;
+}
+.piece:hover .imgHover{
+    visibility: visible;
 }
 .gamePeople{
     display: grid;

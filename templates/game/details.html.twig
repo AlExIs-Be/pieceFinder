@@ -169,7 +169,10 @@
     <div class="contentList">
         <ul>
             {% for content in game.gameContents|filter(c => c.componentType.type == "dé") %}   
-                <li>
+                <li class="piece">
+                    <span class="imgHover">
+                        <img src="{{asset(content.picture)}}" alt={{content.componentType}}>
+                    </span>
                     {{content.quantity}}
                     {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
                     {{content.component.name}}

@@ -17,6 +17,7 @@ use App\Repository\OwnRepository;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Repository\CommentRepository;
+use App\Repository\GameContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -124,7 +125,7 @@ class PiecesLinkController extends AbstractController
             $search[3] = 1;
         }
         //dd($name, $cat, $auth, $plays);
-        $games = $repo->findAll();
+        //$games = $repo->findAll();
         //dd($search);
         if( $search[0] == 1 ){
             if( $search[1] == 1 ){
@@ -185,5 +186,22 @@ class PiecesLinkController extends AbstractController
 
         }
         return $this->render("search/gameResults.html.twig", [ "games" => $results ]);
+    }
+
+    /**
+     * @Route("/searchPiece", name="searchPiece")
+     */
+    public function searchPiece(Request $request, GameContentRepository $repo){
+        $type = $request->request->get("type");
+        $value = $request->request->get("value");
+        $mat = $request->request->get("material");
+        $col = $request->request->get("color");
+
+        //dd($type, $value, $mat, $col);
+        $results = $repo->findPieces($type, $value, $mat, $col);
+        //dd($results);
+
+        return $this->render("search/pieceResults.html.twig", [ "pieces" => $results ]);
+
     }
 }

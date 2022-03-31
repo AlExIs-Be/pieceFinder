@@ -108,8 +108,10 @@
             <div class="gallery">
                 {% for game in user.owns %}
                     <div class="userCollection">
-                        <i class="remove fa-solid fa-circle-minus" data-link="/remove/{{game.id}}"></i>
-                        <p class="tip">Retirer de ma collection</p>
+                        {% if app.user == user %}
+                            <i class="remove fa-solid fa-circle-minus" data-link="/remove/{{game.id}}"></i>
+                            <p class="tip">Retirer de ma collection</p>
+                        {% endif %}
                         <div class="itemCard" data-link="/game/details/{{game.id}}">
                             <figure>
                                 <img src={{game.image}} alt={{game.title}}>
