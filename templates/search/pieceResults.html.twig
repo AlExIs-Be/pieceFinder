@@ -1,49 +1,81 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{parent()}} - Tous les jeux{% endblock %}
+{% block title %}{{parent()}} - Recherche pour une pièce{% endblock %}
 {% block javascripts %}
     {{parent()}}
     <script>
-    let cards = document.querySelectorAll(".itemCard")
-    for( let card of cards ){
-        card.addEventListener("click", ()=>{
-            let link = card.dataset.link
-            window.location.href = link
-        })
-    }
     </script>
 {% endblock %}
 
 {% block body %}
-    <p>Resultat de la recherche</p>
-    {% if pieces is not empty %}
-        <section class="gallery">
+    <section>
+        <h2 class="title banner">Resultat de la recherche</h2>
+        {% if pieces is not empty %}
+            <div class="gallery piece">
             {% for piece in pieces %}
-            <div class="itemCard" data-link="/game/details/{{piece.game.id}}">
-                <figure>
-                    <img src={{piece.picture}} 
-                        alt="{{piece.componentType}}
-                            {% if piece.component %}
-                                {{piece.component}}
-                            {% endif %}
-                            ({{piece.color}})">
-                    <figcaption>
-                        <p class="title">
-                            {% if piece.name %}
-                                {{piece.name}}
-                            {% endif %}
-                            dans : {{piece.game}}
-                        </p>
-                    </figcaption>
-                </figure>
-            </div>
+                <div class="itemCard piece">
+                    <figure class="pieceImg">
+                        <img 
+                        src={{piece.picture}} 
+                        alt=
+                            "{{piece.componentType}}
+                            {{piece.component}}
+                            {{piece.material}}
+                            {{piece.color}}"
+                        >
+                    </figure>
+                    <table class="pieceDetail">
+                        {% if piece.name %}
+                            <thead>
+                                <th colspan=3>
+                                    <h4 class="title banner">
+                                        {{piece.name}}
+                                    </h4>
+                                </th>
+                            </thead>
+                        {% endif %}
+                        <tbody>
+                            <tr>
+                                <td>Type</td>
+                                <td>:&nbsp;</td>
+                                <td>{{piece.componentType}}</td>
+                            </tr>
+                            <tr>
+                                <td>Valeur</td>
+                                <td>:&nbsp;</td>
+                                <td>{{piece.component}}</td>
+                            </tr>
+                            <tr>
+                                <td>Matière</td>
+                                <td>:&nbsp;</td>
+                                <td>{{piece.material}}</td>
+                            </tr>
+                            <tr>
+                                <td>Couleur</td>
+                                <td>:&nbsp;</td>
+                                <td>{{piece.color}}</td>
+                            </tr>
+                            <tr>
+                                <td>Origine</td>
+                                <td>:&nbsp;</td>
+                                <td><a href="/game/details/{{piece.game.id}}">{{piece.game}}</a></td>
+                            </tr>
+                            <tr>
+                                <td>Quantité</td>
+                                <td>:&nbsp;</td>
+                                <td>{{piece.quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             {% endfor %}
-        </section>
-    {% else %}
-        <div>
-            <p>Pas de résultats</p> 
-        </div>
-    {% endif %}
+            </div>
+        {% else %}
+            <div>
+                <p>Pas de résultats</p> 
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}
 
 

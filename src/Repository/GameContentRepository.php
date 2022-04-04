@@ -46,21 +46,20 @@ class GameContentRepository extends ServiceEntityRepository
     }
     
     public function findPieces($type, $value, $mat, $col){
+        //dd($type, $value, $mat, $col);
         $query = $this
             ->createQueryBuilder("piece")
-            ->select( "piece", "ct")
-            ->join("piece.componentType", "ct");
-            //->join("gameContent.component", "c");
-        
+            ->select( "piece" );
+  
         if( $type ){
             $query = $query
-                ->andWhere("piece.componentType = :id")
-                ->setParameter(":id", $type);
+                ->andWhere("piece.componentType = :ctid")
+                ->setParameter(":ctid", $type);
         }
         if( $value ){
             $query = $query
-                ->andWhere("piece.component = :id")
-                ->setParameter(":id", $value);
+                ->andWhere("piece.component = :cid")
+                ->setParameter(":cid", $value);
         }
         if( $mat ){
             $query = $query
@@ -72,7 +71,9 @@ class GameContentRepository extends ServiceEntityRepository
                 ->andWhere("piece.color LIKE :col")
                 ->setParameter(":col", $col);
         }
+        //dd($query->getQuery());
         return $query->getQuery()->getResult();
+        
 
     }
 

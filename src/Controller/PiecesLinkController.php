@@ -197,11 +197,12 @@ class PiecesLinkController extends AbstractController
         $mat = $request->request->get("material");
         $col = $request->request->get("color");
 
+        $params = ["type" => $type, "value" => $value, "material" => $mat, "color" => $col];
         //dd($type, $value, $mat, $col);
         $results = $repo->findPieces($type, $value, $mat, $col);
         //dd($results);
 
-        return $this->render("search/pieceResults.html.twig", [ "pieces" => $results ]);
+        return $this->render("search/pieceResults.html.twig", [ "pieces" => $results, "params" => $params ]);
 
     }
 }

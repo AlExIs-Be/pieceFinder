@@ -5,7 +5,12 @@
     {{parent()}}
     <script>
         let cards = document.querySelectorAll(".itemCard")
-
+        for( let card of cards ){
+                card.addEventListener("click", ()=>{
+                    let link = card.dataset.link
+                    window.location.href = link
+                })
+            }
         {% if app.user == user %}
             let infoBtn = document.querySelector("#infoBtn")
             let passwordBtn = document.querySelector("#passwordBtn")
@@ -27,19 +32,16 @@
                     })
                 })
             }
-            for( let card of cards ){
-                card.addEventListener("click", ()=>{
-                    let link = card.dataset.link
-                    window.location.href = link
-                })
-            }
+            
 
             infoBtn.addEventListener("click", ()=>{
                 userInfos.classList.toggle("active")
                 if( infoBtn.innerText == "Modifier mes informations" ){
+                    infoBtn.classList.remove("main")
                     infoBtn.innerText = "Annuler"
                 }else{
                     infoBtn.innerText = "Modifier mes informations"
+                    infoBtn.classList.add("main")
                 }
             })
         {% endif %}
@@ -50,16 +52,10 @@
 {% block body %}
     <div class="container">
         <section>
-            <h2 class="banner">Profil de {{user.pseudo}}</h2>
-            <p>A propos de moi</p>
+            <h2 class=" title banner">Profil de {{user.pseudo}}</h2>
+            <h3 class="title">A propos de moi</h3>
             <p>{{user.about|nl2br}}</p>
             {% if app.user == user %}
-                <div class="right">
-                    <button class="btn" id="infoBtn">Modifier mes informations</button>
-                    {#}
-                    <button class="btn" id="passwordBtn">Changer mon mot de passe</button>
-                    {#}
-                </div>
                 <div class="userInfos">
                     {{ form_start(userInfos) }}
                         <div class="form contact">
@@ -94,17 +90,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form center">
-                                <button type="submit" class="btn contact">Enregistrer</button>
+                            <div class="right">
+                                <button type="submit" class="btn main">Enregistrer</button>
                             </div>
                         </div>
                         {{ form_rest(userInfos) }}
                     {{ form_end(userInfos) }}
                 </div>
+                <div class="right">
+                    <button class="btn main" id="infoBtn">Modifier mes informations</button>
+                    {#}
+                    <button class="btn" id="passwordBtn">Changer mon mot de passe</button>
+                    {#}
+                </div>
             {% endif %}
         </section>
         <section>
-            <h3 class='title banner'>Ma collection ({{ user.owns|length }} jeu{% if user.owns|length > 1 %}x{% endif %})</h3>
+            <h3 class='title banner'>
+                {% if app.user == user %}M{% else %}S{% endif %}a collection
+                ({{ user.owns|length }} jeu{% if user.owns|length > 1 %}x{% endif %})
+            </h3>
             <div class="gallery">
                 {% for game in user.owns %}
                     <div class="userCollection">
@@ -115,10 +120,8 @@
                         <div class="itemCard" data-link="/game/details/{{game.id}}">
                             <figure>
                                 <img src={{game.image}} alt={{game.title}}>
-                                <figcaption>
-                                    <p class="title">{{game.title}}</p>
-                                </figcaption>
                             </figure>
+                             <p class="title banner">{{game.title}}</p>
                         </div>
                     </div>
                 {% endfor %}

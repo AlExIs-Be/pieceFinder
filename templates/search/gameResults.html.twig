@@ -15,17 +15,15 @@
 {% endblock %}
 
 {% block body %}
-    <p>Resultat de la recherche</p>
+    <h2 class="title banner">Resultat de la recherche</h2>
     {% if games is not empty %}
         <section class="gallery">
             {% for game in games %}
             <div class="itemCard" data-link="/game/details/{{game.id}}">
                 <figure>
                     <img src={{game.image}} alt={{game.title}}>
-                    <figcaption>
-                        <p class="title">{{game.title}}</p>
-                    </figcaption>
                 </figure>
+                <p class="title banner">{{game.title}}</p>
             </div>
             {% endfor %}
         </section>

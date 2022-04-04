@@ -1,11 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{parent()}} - Accueil{% endblock %}
-
-{% block header %}<header></header>{% endblock %}
+{% block javascripts %}
+    <script>
+        let choices = document.querySelectorAll(".homeChoice")
+        choices.forEach( choice => {
+            choice.addEventListener("click", ()=>{
+                document.querySelector(".active").classList.remove("active")
+                document.querySelector(".visible").classList.remove("visible")
+                choice.classList.toggle("active")
+                let link = choice.querySelector(".link")
+                link.classList.toggle("visible")
+            })
+        })
+    </script>
+{% endblock %}
 {% block body %}
 <section>
-    <div class="homeChoice">
+    <div class="homeLogo">
         <img src="{{asset("image/logoPF.png")}}" alt="logo">
     </div>
     <h1 class="title banner">Bienvenue sur PieceFinder</h1>
@@ -16,16 +28,48 @@
     </p>
     <br>
     <h2 class="banner title">Que faire ?</h2>
-    <div class="homeChoice">
-        <a href="/everyGames">Voir tous les jeux</a>
-        <a href="/search">Chercher un jeu ou l'origine d'une pièce</a>
-        {% if app.user %}
-            <a href="/user/details/{{app.user.id}}">Voir mon profil</a>
-            <a href="/app_logout">Se déconnecter</a>
-        {% else %}
-            <a href="/app_register">Créer un compte</a>
-            <a href="/app_login">Se connecter</a>
-        {% endif %}
+    <div class="homePannel box">
+        <div class="homePannel">
+            <div class="homeChoice active">
+                <i class="fa-solid fa-chess-rook"></i>
+                <a href="/everyGames">
+                    <span class="link visible">Voir tous les jeux</span>
+                </a>
+            </div>
+            <div class="homeChoice">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <a href="/search">
+                    <span class="link hidden">Chercher un jeu ou l'origine d'une pièce</span>
+                </a>
+            </div>
+            {% if app.user %}
+                <div class="homeChoice">
+                    <i class="fa-solid fa-id-card-clip"></i>
+                    <a href="/user/details/{{app.user.id}}">
+                        <span class="link hidden">Voir mon profil</span>
+                    </a>
+                </div>
+                <div class="homeChoice">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <a href="/app_logout">
+                        <span class="link hidden">Se déconnecter</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="homeChoice">
+                    <i class="fa-solid fa-address-card"></i>
+                    <a href="/app_register">
+                        <span class="link hidden">Créer un compte</span>
+                    </a>
+                </div>
+                <div class="homeChoice">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <a href="/app_login">
+                        <span class="link hidden">Se connecter</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </section>
 
