@@ -15,6 +15,7 @@
         })
     </script>
 {% endblock %}
+{% block header %}<header></header>{% endblock %}
 {% block body %}
 <section>
     <div class="homeLogo">
@@ -36,6 +37,15 @@
                     <span class="link visible">Voir tous les jeux</span>
                 </a>
             </div>
+
+            {% if app.user and "ROLE_ADMIN" in app.user.roles %}
+                <div class="homeChoice">
+                    <i class="fa-solid fa-cog"></i>
+                    <a href="/admin">
+                        <span class="link">Admin</span>
+                    </a>
+                </div>
+            {% endif %}
             <div class="homeChoice">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <a href="/search">

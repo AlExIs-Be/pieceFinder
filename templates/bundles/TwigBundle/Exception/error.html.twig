@@ -24,4 +24,196 @@
             </span>
         </a>.
     </p>
+    <div class="banner">
+        Ou tu peux faire un morpion si tu veux
+        <p class="affichage banner"></p>
+        <button id="btn" class="btn main">Rejouer</button>
+    </div>
+    <div id="jeu"></div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+    <script>
+    let scoreUser = 0
+    let scoreBot = 0
+        Depart()
+        function Depart(){
+            const cellule = document.createElement("div")
+            cellule.classList.add("cell")
+            const jeu = document.querySelector("#jeu")
+            jeu.innerHTML = ""
+            document.querySelector(".affichage").textContent = ""
+            document.getElementById("btn").style.display = "none"
+            for(let i=1 ; i<=9 ; i++){
+                let newcell = cellule.cloneNode()
+                newcell.classList.add("cell"+i)
+                jeu.appendChild(newcell)
+                newcell.addEventListener("click", jouer)
+            }
+        }
+        function aGagne(){
+            let cells = jeu.querySelectorAll(".cell")
+                //test sur les diagonales
+            if(cells[0].innerText == cells[4].innerText  && cells[4].innerText == cells[8].innerText && cells[0].innerText!=""){
+                return true
+            }else if(cells[2].innerText == cells[4].innerText  && cells[4].innerText == cells[6].innerText && cells[2].innerText!=""){
+                return true
+            }else{
+                for(let i=0 ; i<=2 ; i++){
+                    //test sur les lignes 
+                    if( cells[i*3].innerText == cells[(i*3)+1].innerText  && cells[(i*3)+1].innerText == cells[(i*3)+2].innerText && cells[i*3].innerText!=""){
+                        return true
+                    //test sur les colonnes
+                    }else if(cells[i].innerText == cells[i+3].innerText  && cells[i+3].innerText == cells[i+6].innerText && cells[i].innerText!=""){
+                        return true
+                    }
+                }
+                return false
+            }     
+        }
+        function estFini(){
+            let cells =  jeu.querySelectorAll(".cell")
+            let nb = 0
+            for(let i=0 ; i<cells.length ; i++){
+                if( cells[i].classList.contains("cochee") ){
+                    nb++
+                }
+            }
+            if(nb == 9){
+                return true
+            }else return false
+        }
+        function testFin(){
+            if (aGagne() || estFini() ){
+                let cells =  jeu.querySelectorAll(".cell")
+                for(let i=0 ; i<cells.length ; i++){
+                    cells[i].removeEventListener("click", jouer)
+                }
+                if( aGagne() ){
+                    return 1
+                }else if ( estFini() ){
+                    return 2
+                }
+            }else return 0
+        }
+        function jouer(event){
+            if(!event.target.classList.contains("cochee") ){
+                event.target.classList.add("cochee")
+                event.target.innerText = "X"
+                if (testFin() == 1){
+                    document.querySelector(".affichage").innerHTML = "tu as gagné !"
+                    scoreUser++
+                    if( scoreUser == 10 ){
+                        document.querySelector(".affichage").innerHTML = "Bravo, ça fait 10 fois que tu bats une IA en carton !!<br>Tu n'as rien de mieux à faire ?..."
+                    }
+                }
+                else if( testFin() == 2){
+                    document.querySelector(".affichage").textContent = "match nul !"
+                }
+                else{
+                    caseToPlay = bot()
+                    caseToPlay.innerText = "O"
+                    caseToPlay.classList.add("cochee")
+                    if (testFin() == 1){
+                        document.querySelector(".affichage").innerHTML = "Tu as perdu !"
+                        scoreBot++
+                        if( scoreBot == 10 ){
+                        document.querySelector(".affichage").innerHTML = "Eh ben, ça fait 10 fois que tu te fais battre par une IA en carton !!<br>Tu n'as rien de mieux à faire ?..."
+                    }
+                    }
+                }
+            }
+            if( testFin() > 0 ){
+                document.getElementById("btn").style.display = "initial"
+            }
+        }
+        function bot(){
+            let choicesToBlockX = []
+            let choicesToWin =[]
+            let cells = jeu.querySelectorAll(".cell")
+                //test sur les diagonales
+            if( (cells[0].innerText == cells[4].innerText  ||
+                cells[4].innerText == cells[8].innerText ||
+                cells[0].innerText == cells[8].innerText ) 
+                &&
+                ( cells[0].innerText != "" ||
+                cells[8].innerText != "" ) ){
+                    let line = [ cells[0], cells[4], cells[8]]
+                    result = testOnLine(line)
+                    choicesToWin.push(result.win)
+                    choicesToBlockX.push(result.block)
+            }
+            if( (cells[2].innerText == cells[4].innerText ||
+                cells[4].innerText == cells[6].innerText || 
+                cells[2].innerText == cells[6].innerText ) 
+                &&
+                ( cells[2].innerText != "" || cells[6].innerText != "" ) ){
+                    let line = [ cells[2], cells[4], cells[6]]
+                    result = testOnLine(line)
+                    choicesToWin.push(result.win)
+                    choicesToBlockX.push(result.block)
+
+            }
+            for(let i=0 ; i<=2 ; i++){
+                //test sur les lignes 
+                let j = i*3
+                if( ( cells[j].innerText == cells[j+1].innerText  ||
+                    cells[j+1].innerText == cells[j+2].innerText ||
+                    cells[j].innerText == cells[j+2].innerText )
+                    &&
+                    ( cells[j].innerText != "" || cells[j].innerText != "" ) ){
+                        let line = [ cells[j], cells[j+1], cells[j+2]]
+                        result = testOnLine(line)
+                        choicesToWin.push(result.win)
+                        choicesToBlockX.push(result.block)
+                //test sur les colonnes
+                }if( ( cells[i].innerText == cells[i+3].innerText  ||
+                    cells[i+3].innerText == cells[i+6].innerText ||
+                    cells[i].innerText == cells[i+6].innerText )
+                    &&
+                    ( cells[i].innerText != "" || cells[i+6] != "" )){
+                        let line = [ cells[i], cells[i+3], cells[i+6]]
+                        result = testOnLine(line)
+                        choicesToWin.push(result.win)
+                        choicesToBlockX.push(result.block)
+                }
+            }
+            console.log("win", choicesToWin, "\nblock", choicesToBlockX)
+            for( caseToWin of choicesToWin ){
+                if( caseToWin != null && !caseToWin.classList.contains("cochee") ){
+                    return caseToWin
+                }
+            }
+            for( caseToBlock of choicesToBlockX ){
+                if( caseToBlock != null && !caseToBlock.classList.contains("cochee") ){
+                    return caseToBlock
+                }
+            }
+            do{
+                let random = Math.floor(Math.random() * 9) + 1
+                var cellO = document.querySelector(".cell"+random)
+            }while( cellO.classList.contains("cochee") )
+            return cellO
+            console.log("choicesToWin",choicesToWin, "choicesToBlockX",choicesToBlockX)
+        }
+        function testOnLine(line){
+            let win =null
+            let block = null
+            if( line[0].innerText == "O" && line[1].innerText == "O"){
+                win = line[2]
+            }else if( line[1].innerText == "O" && line[2].innerText == "O"){
+                win = line[0]
+            }else if( line[0].innerText == "O" && line[2].innerText == "O"){
+                win = line[1]
+            }else if( line[0].innerText == "X" && line[1].innerText == "X"){
+                block = line[2]
+            }else if( line[1].innerText == "X" && line[2].innerText == "X"){
+                block = line[0]
+            }else if( line[0].innerText == "X" && line[2].innerText == "X"){
+                block = line[1]
+            }
+            return {win: win, block: block}
+        }
+        document.getElementById("btn").addEventListener("click", ()=>Depart())        
+    </script>
 {% endblock %}
