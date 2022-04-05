@@ -71,11 +71,27 @@ ul{
     padding-left: 1em;
     text-indent: -1em;
 }
+ul.cgu{
+    padding-left: 4em;
+}
 li:before{
     content: "> ";
 }
 i.mobile{
     display: none;
+}
+div.flashMessage{
+    width: 80%;
+    margin: auto;
+    font-size: 1.3em;
+    text-align: center;
+}
+.flashMessage.alert::before, .flashMessage.alert::after{
+    content: " !! ";
+    font-size: 1.5em;
+}
+.flashMessage.alert{
+    color: var(--main-xdark);
 }
 /*=========================================
     Header / Menu
@@ -503,6 +519,10 @@ label.required::after{
 =========================================*/
 .multiform{
     display: flex;
+    justify-content: center;
+}
+.multiform .form{
+    margin: 0;
 }
 .multiform .form.contact{
     width: 100%;
@@ -533,6 +553,35 @@ label.required::after{
 }
 .pieceDetail td{
     align-self: baseline;
+}
+/*=========================================
+    Page d'erreur
+=========================================*/
+.error.banner{
+    font-size: 1.4em;
+}
+.error span{
+    display: inline-block;
+}
+.linkHome{
+    text-decoration: none;
+    align-items: baseline;
+}
+.forest{
+    position: relative;
+}
+.tree{
+    margin: 0 -0.5em;
+    z-index: 1;
+}
+.man{
+    transform: scale(-1,1);
+    margin: 0 -0.3em 0 0;
+}
+.house{
+    font-size: 3em;
+    z-index: 4;
+    margin: 0 -0.15em;
 }
 /*=========================================
     Footer

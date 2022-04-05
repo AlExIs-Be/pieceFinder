@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{{parent()}} - Enregistrement{% endblock %}
 
 {% block body %}
+    {% if error %}
+        <div class="alert flashMessage">{{error}}</div>
+    {% endif %}
     <h1 class="title banner">Enregistrement</h1>
-
     {{ form_start(registrationForm) }}
         <div class="form contact">
             <div class="form align">
@@ -32,7 +34,7 @@
             
             <div class="form center">
             <p>
-                {{ form_label(registrationForm.agreeTerms, "J'accepte les Conditions Générales d'Utilisation") }}
+                {{ form_label(registrationForm.agreeTerms, "Je reconnais avoir lu et compris les CGU et je les accepte") }}
                 {{ form_widget(registrationForm.agreeTerms) }}
             </p>
             <button type="submit" class="btn main">S'inscrire</button>

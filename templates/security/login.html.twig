@@ -5,7 +5,7 @@
 {% block body %}
 <form method="post" class="form contact">
     {% if error %}
-        <div class="alert alert-danger">Les identifiants ne sont pas les bons !</div>
+        <div class="alert flashMessage">Les identifiants ne sont pas les bons </div>
     {% endif %}
 
     {% if app.user %}
@@ -16,10 +16,13 @@
 
     <h2 class="title banner">S'identifier</h2>
     <div class="form align">
+    
         <label for="inputEmail">Email</label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+        
         <label for="inputPassword">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    
     </div>
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"

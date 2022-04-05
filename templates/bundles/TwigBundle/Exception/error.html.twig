@@ -1,0 +1,27 @@
+{# templates/bundles/TwigBundle/Exception/error.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - ERREUR !!{% endblock %}
+
+{% block body %}
+    <h1 class="flashMessage alert banner">Cette page est introuvable</h1>
+
+    <p class="error banner">
+        <i class="fa-solid fa-magnifying-glass"></i> La page demandée n'a pas été trouvée...<br>
+        Vérifiez l'URL de la ressource ou retournez à la page d'accueil : <br>
+        <a class="linkHome" href="{{ path('home') }}">
+            <span class="forest">
+                <span class="tree">&#127795;</span>
+                <span class="tree">&#127795;</span>
+                <span class="tree">&#127795;</span>
+                <span class="tree">&#127795;</span>
+            </span>
+            <span class="man">&#127939;</span>
+            <span class="house">&#9962;</span>
+            <span class="forest">
+                <span class="tree">&#127795;</span>
+                <span class="tree">&#127795;</span>
+            </span>
+        </a>.
+    </p>
+{% endblock %}

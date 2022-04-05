@@ -22,6 +22,7 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+        $error = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
             // hashage du mot de passe
@@ -36,10 +37,14 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             
             return $this->redirectToRoute('app_login');
+        }elseif($form->isSubmitted()){
+            $error = "Impossible de créer un compte avec ces identifiants";
         }
+            
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            "error" => $error
         ]);
     }
 }
