@@ -4,6 +4,32 @@
 {% block javascripts %}
     {{parent()}}
     <script>
+        let pieces = document.querySelectorAll(".itemCard")
+        let wrapper = document.querySelector(".extWrapper")
+        let modalBck = document.createElement("div")
+        let modal = document.createElement("div")
+
+        modalBck.classList.add("modalBack")
+        modal.classList.add("modal")
+
+        modalBck.appendChild(modal)
+
+        pieces.forEach( (piece)=>{
+            piece.addEventListener("click", ()=>{
+
+                let pieceImg = piece.querySelector("img").cloneNode(true)
+                let table = piece.querySelector(".pieceDetail").cloneNode(true)
+
+                modal.appendChild(pieceImg)
+                modal.appendChild(table)
+
+                document.body.appendChild(modalBck)
+            })
+        })
+        modalBck.addEventListener("click", function(event){
+            document.body.removeChild(modalBck)
+            modal.innerHTML = ""
+        })
     </script>
 {% endblock %}
 
@@ -18,11 +44,7 @@
                         <img 
                         src={{piece.picture}} 
                         alt=
-                            "{{piece.componentType}}
-                            {{piece.component}}
-                            {{piece.material}}
-                            {{piece.color}}"
-                        >
+                            "{{piece.componentType}} {{piece.component}} {{piece.material}} {{piece.color}}">
                     </figure>
                     <table class="pieceDetail">
                         {% if piece.name %}
@@ -37,32 +59,32 @@
                         <tbody>
                             <tr>
                                 <td>Type</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td>{{piece.componentType}}</td>
                             </tr>
                             <tr>
                                 <td>Valeur</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td>{{piece.component}}</td>
                             </tr>
                             <tr>
                                 <td>Matière</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td>{{piece.material}}</td>
                             </tr>
                             <tr>
                                 <td>Couleur</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td>{{piece.color}}</td>
                             </tr>
                             <tr>
                                 <td>Origine</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td><a href="/game/details/{{piece.game.id}}">{{piece.game}}</a></td>
                             </tr>
                             <tr>
                                 <td>Quantité</td>
-                                <td>:&nbsp;</td>
+                                <td class="notModal">:&nbsp;</td>
                                 <td>{{piece.quantity}}</td>
                             </tr>
                         </tbody>

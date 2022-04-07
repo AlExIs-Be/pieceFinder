@@ -126,7 +126,10 @@ class GameContent
 
     public function getPicture(): ?string
     {
-        return $this->picture;
+        if( $this->picture == 1){
+            return "image/null.png";
+        }
+        return "image/photos/".$this->picture;
     }
 
     public function setPicture(string $picture): self

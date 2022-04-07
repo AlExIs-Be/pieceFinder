@@ -28,7 +28,7 @@
                                 {% if "ROLE_ADMIN" in app.user.roles %}
                                     <a href="/admin"><span class="desktop">Admin</span><i class="fa-solid fa-cog mobile"></i></a>
                                 {% endif %}
-                                <a href="/user/details/{{app.user.id}}"><span class="desktop">Mon Profil</span><i class="mobile fa-solid fa-id-card-clip"></i></a>
+                                <a href="/user/details/{{app.user.id}}"><span class="desktop">Profil</span><i class="mobile fa-solid fa-id-card-clip"></i></a>
                                 <a href="/app_logout"><span class="desktop">Déconnexion</span><i class="mobile fa-solid fa-right-from-bracket"></i></a>
                             {% else %}
                                 <a href="/app_register"><span class="desktop">S'inscrire</span><i class="mobile fa-solid fa-address-card"></i></a>

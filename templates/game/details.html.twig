@@ -5,11 +5,37 @@
     {{parent()}}
     {% if( app.user ) %}
         <script>
-            const addbtn = document.querySelector("#addbtn")
+            var collbtn = document.querySelector("#collectBtn")
             const addComment = document.querySelector("#addComment")
             const commentForm = document.querySelector("#commentForm")
             const rangeInput = document.querySelector('#comment_rate')
             const numberInput = document.querySelector('#ratevalue')
+
+            let pieces = document.querySelectorAll(".pieceDescription")
+            let modalBck = document.createElement("div")
+            let modal = document.createElement("div")
+
+            modalBck.classList.add("modalBack")
+            modal.classList.add("modal")
+
+            modalBck.appendChild(modal)
+
+            pieces.forEach( (piece)=>{
+                piece.addEventListener("click", ()=>{
+
+                    let pieceImg = piece.querySelector("img").cloneNode(true)
+                    //let table = piece.querySelector(".pieceDetail").cloneNode(true)
+
+                    modal.appendChild(pieceImg)
+                    //modal.appendChild(table)
+
+                    document.body.appendChild(modalBck)
+                })
+            })
+            modalBck.addEventListener("click", function(event){
+                document.body.removeChild(modalBck)
+                modal.innerHTML = ""
+            })
 
             function handleInputChange(e) {
                 let target = e.target
@@ -21,16 +47,38 @@
             rangeInput.addEventListener('input', handleInputChange)
             numberInput.addEventListener('input', handleInputChange)
 
-            function modifyBtn(btn){
-                btn.innerHTML = "Dans ma collection"
+            function modifyBtn( value){
+                let div = document.querySelector(".inCollect")
+                if( value == "added" ){
+                    let text = document.createElement("p")
+                    text.classList.add("banner")
+                    text.innerHTML = "<strong>Dans ma collection</strong>"
+                    div.prepend(text)
+                    collbtn.innerHTML = "Retirer"
+                }else if( value == "removed" ){
+                    let text = div.querySelector("p")
+                    div.removeChild(text)
+                    collbtn.innerHTML = "Ajouter à ma collection"
+                }
             }
-
-            addbtn.addEventListener("click", (event)=>{
+            collbtn.addEventListener("click", (event)=>{
+                let url, action
+                if( collbtn.classList.contains("add") ){
+                    url = "/addown/{{game.id}}"
+                    action = modifyBtn("added")
+                    collbtn.classList.remove("add")
+                    collbtn.classList.add("remove")
+                }else if( collbtn.classList.contains("remove") ){
+                    url = "/remove/{{game.id}}"
+                    action = modifyBtn("removed")
+                    collbtn.classList.remove("remove")
+                    collbtn.classList.add("add")
+                }
                 $.ajax({
-                    url: "/addown/{{game.id}}",
+                    url: url,
                     method: "POST",
                     dataType: "json",
-                    success: modifyBtn(event.target),
+                    success: action,
                     error: function(xhr, status, error) {
                         var err = eval("(" + xhr.responseText + ")")
                         console.table(err)
@@ -91,13 +139,21 @@
                         </p>
                     </div>
                     {% if app.user %}
-                        <button class="btn" id="addbtn">
                             {% if game.inCollection(app.user) %}
-                                Dans ma collection
+                                <div class="inCollect">
+                                    <p class="banner"><strong>Dans ma collection</strong></p>
+                                    <button class="btn remove" id="collectBtn">
+                                        Retirer
+                                    </button>
+                                </div>
                             {% else %}
-                                Ajouter à ma collection
+                                <div class="inCollect">
+                                    <button class="btn add" id="collectBtn">
+                                        Ajouter à ma collection
+                                    </button>
+                                </div>
                             {% endif %}
-                        </button>
+                        
                     {% endif %}
                 </div>
             </div>
@@ -111,143 +167,168 @@
 <section>
     <h3 class="title banner">Contenu du jeu :</h3>
     <div class="gameContent">
-    {% if game.gameContents|filter(c => c.componentType.type == "livret") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "livret") %}   
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                </li>
-            {% endfor %}
-        </ul>
+        {% if game.gameContents|filter(c => c.componentType.type == "livret") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "livret") %}   
+                        <li class="pieceDescription">
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "sac") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "sac") %}   
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "plateau") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "plateau") %}   
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}x{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "pièce") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "pièce") %}   
+                        <li>
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            de valeur {{content.component.name}}
+                            ({{content.name}})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "dé") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "dé") %}   
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                            ({{content.color}})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "tuile") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "tuile") %}   
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "carte") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents
+                    |filter(c => c.componentType.type == "carte")
+                    |sort( (a,b) => b.color <=> a.color )
+                    |sort( (a,b) => b.component <=> a.component )  %}
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.name}}
+                            {% if content.component.name is defined %}
+                                ({{content.component.name}})
+                            {% endif %}
+                            ({{content.color}})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "figurine") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "figurine") %}                 
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {{content.component.name}}
+                            {{content.name}}
+                            ({{content.color}})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if game.gameContents|filter(c => c.componentType.type == "jeton") is not empty %}
+            <div class="contentList">
+                <ul>
+                    {% for content in game.gameContents|filter(c => c.componentType.type == "jeton") %}                 
+                        <li class="pieceDescription">
+                            <span class="imgHover">
+                                <img src={{asset(content.picture)}} alt={{content.componentType}}>
+                            </span>
+                            {{content.quantity}}
+                            {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
+                            {% if content.component.name is defined %}
+                                {{content.component.name}}
+                            {% endif %}
+                            {{content.name}}
+                            ({{content.color}})
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "sac") is not empty %}
-        <div class="contentList">
-            <ul>
-                {% for content in game.gameContents|filter(c => c.componentType.type == "sac") %}   
-                    <li>
-                        {{content.quantity}}
-                        {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                        {{content.component.name}}
-                        {{content.name}}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "plateau") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "plateau") %}   
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}x{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "pièce") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "pièce") %}   
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "dé") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "dé") %}   
-                <li class="pieceDescription">
-                    <span class="imgHover">
-                        <img src="{{asset(content.picture)}}" alt={{content.componentType}}>
-                    </span>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                    ({{content.color}})
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "tuile") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "tuile") %}   
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "carte") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "carte") %}   
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.name}}
-                    {% if content.component.name is defined %}
-                        ({{content.component.name}})
-                    {% endif %}
-                    ({{content.color}})
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "figurine") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "figurine") %}                 
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {{content.component.name}}
-                    {{content.name}}
-                    ({{content.color}})
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if game.gameContents|filter(c => c.componentType.type == "jeton") is not empty %}
-    <div class="contentList">
-        <ul>
-            {% for content in game.gameContents|filter(c => c.componentType.type == "jeton") %}                 
-                <li>
-                    {{content.quantity}}
-                    {{content.componentType}}{% if content.quantity > 1 %}s{% endif %}
-                    {% if content.component.name is defined %}
-                        {{content.component.name}}
-                    {% endif %}
-                    {{content.name}}
-                    ({{content.color}})
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
 </section>
 
 <div class="gamePeople">

@@ -110,8 +110,7 @@ header{
     align-items: center;
 }
 .logo.noun a{
-    margin: 0;
-    text-decoration: none;
+    margin: 0 5px;
     color: var(--main-xclear)
 }
 .PFlogo{
@@ -122,12 +121,34 @@ header{
     height: 100%;
     object-fit: contain;
 }
-.logo.noun .PFnoun{
-    margin: 0 0.7em;
-}
 .headerMenu{
     display: flex;
     align-items: center;
+}
+footer a, header a{
+    display: inline-block;
+    position: relative;
+    margin: 0 1em;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.4s;
+}
+header a:not(.PFlogo):after, footer a:after{
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 2px;
+    bottom: -2px;
+    left: 5%;
+    background-color: var(--main-xclear);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+header a:hover, header a:focus, footer a:hover, footer a:focus{
+    transform: scale(1.1);
+}
+header a:hover:after, header a:focus:after, footer a:hover:after, footer a:focus:after{
+    transform: scaleX(1);
 }
 /*=========================================
     Page d'accueil
@@ -167,10 +188,30 @@ p.banner{
     font-size: 3em;
 }
 .homePannel a{
+    position: relative;
     display: inline-block;
     font-size: 1.3em;
     margin: 0.5em;
+    text-decoration: none;
     color: var(--main-xxdark);
+    transition: transform 0.3s;
+}
+.homePannel a:hover{
+    transform: scale(1.1);
+}
+.homePannel a:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--main-xxdark);
+    transform: scaleX(0);
+    height: 2px;
+    transition: transform 0.3s;
+}
+.homePannel a:hover:after{
+    transform: scaleX(1);
 }
 .homeChoice{
     position: relative;
@@ -218,17 +259,23 @@ p.banner{
     gap: 10px;
 }
 .itemCard{
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--main-dark);
     border-radius: 5px;
     padding-bottom: 0.5em;
+    box-shadow: 0 0 0 0;
+    transition: box-shadow 0.2s, transform 0.2s;
 }
 .itemCard:hover{
     cursor: pointer;
+    box-shadow: 3px 3px 8px var(--main-xdark);
+    transform: scale(1.02);
 }
 .itemCard figure{
     text-align: center;
     height: 120px;
-    
+    margin: 5px auto;
 }
 figure img{
     width: 100%;
@@ -308,12 +355,16 @@ figure figcaption{
     visibility: hidden;
     width: 100px;
     height: 100px;
+    z-index: 1;
 }
 .imgHover img{
     border: 1px solid var(--main-xxdark);
     border-radius: 5px;
     width: 100%;
     object-fit: cover;
+}
+.pieceDescription:hover{
+    font-weight: 700;
 }
 .pieceDescription:hover .imgHover{
     visibility: visible;
@@ -375,6 +426,15 @@ p.commentText{
 .userCollection{
     position: relative;
 }
+.userCollection .itemCard{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.userCollection .itemCard:hover{
+    transform: none;
+}
 .userCollection .tip{
     position: absolute;
     background-color: var(--main-clear);
@@ -391,6 +451,7 @@ p.commentText{
     position: absolute;
     top: 8px;
     right: 5px;
+    z-index: 1;
 }
 .userCollection i:hover, i:hover + .tip{
     cursor: pointer;
@@ -532,20 +593,18 @@ label.required::after{
 .multiform input, .multiform select, .multiform textarea{
     margin: 0.5em 1em 0.5em 0;
 }
-.pieceResults{
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
 .itemCard.piece{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-top: 5px;
 }
 .pieceImg{
     margin: 0;
+}
 
-}/*tableau des informations sur les pièces*/
+/*tableau des informations sur les pièces*/
+
 .pieceDetail{
     margin: 0;
     margin: 0 auto;
@@ -555,6 +614,54 @@ label.required::after{
 }
 .pieceDetail td{
     align-self: baseline;
+}
+/*gestion de l'affichage des photos en grand*/
+.modalBack{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(20, 4, 58, .8);
+    z-index: 1;
+    transition: opacity 0.5s;
+}
+.modalBack:after{
+    position: absolute;
+    font-size: 2em;
+    top: 2%;
+    right: 1em;
+    content: "X";
+    color: var(--main-xxclear);
+}
+.modalBack:after:hover{
+    cursor: pointer;
+}
+.modal{
+    z-index: 2;
+    margin: 5% auto;
+    width: 80%;
+    height: 90%;
+    background-color: var(--main-xxclear);
+    opacity: 100;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal img{
+    max-height: 100%;
+    max-width: 60%;
+    flex: 1;
+    object-fit: contain;
+}
+.modal .pieceDetail, .modal .pieceDetail td{
+    border: 1px solid var(--main-xxdark);
+    border-collapse: collapse;
+    padding: 2px 5px;
+}
+.modal .notModal{
+    display: none;
 }
 /*=========================================
     Page d'erreur
@@ -638,12 +745,6 @@ footer{
     display: flex;
     align-items: center;
 }
-.infoSite a, .headerMenu a{
-    display: inline-block;
-    margin: 0 1em;
-    text-decoration: none;
-    color: inherit;
-}
 footer p{
     margin: 5px 1em;
 }
@@ -678,13 +779,25 @@ footer p{
     .gamePeople{
         gap: 2em;
     }
+    .modal{
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+    .modal img{
+        max-width: 100%;
+        max-height: 80%;
+        flex: 0;
+    }
 }
 @media only screen and (max-width: 550px) {
     .headerMenu{
         flex: 1;
         justify-content: space-evenly;
     }
-    .headerMenu a{
+    .PFlogo{
+        height: 37px;
+    }
+    header a{
         margin: 0;
         font-size: 1.5em;
     }
@@ -716,11 +829,13 @@ footer p{
     .userInfos input, .userInfos textarea{
         width: 100%;
     }
-    
+    .modalBack:after{
+        right: 2%;
+    }
 }
 @media only screen and (max-width: 440px) {
-    .itemCard figure{
-        width: 50%;
+    header{
+        padding: 5px 0;
     }
     .itemCard.piece{
         display: flex;
