@@ -4,25 +4,92 @@
 {% block javascripts %}
     {{parent()}}
     <script>
+    let gallery = document.querySelector(".gallery")
     let cards = document.querySelectorAll(".itemCard")
+    let yearAtt = 1, nameAtt = 2, durationAtt = 3
+
     for( let card of cards ){
         card.addEventListener("click", ()=>{
             let link = card.dataset.link
             window.location.href = link
         })
     }
+
+    let orders = document.querySelectorAll(".order")
+    let choices = document.querySelectorAll(".orderChoice")
+    orders.forEach( order =>{
+        order.addEventListener("click", ()=>{
+            let cards = document.querySelectorAll(".itemCard")
+            let yearAtt = 1, nameAtt = 2, durationAtt = 3
+            let sort = order.id+"Att"
+            let choice = order.querySelector(".orderChoice")
+            let newGallery
+
+            newGallery = Array.from(cards).sort( (a,b) =>{
+
+                let aVal = a.attributes[eval(sort)].value
+                let bVal = b.attributes[eval(sort)].value
+
+                /*
+                if( choice.classList.contains("ASC") ){
+
+                    choice.classList.add("DESC")
+                    choice.classList.remove("ASC")
+                    choice.innerHTML = "&nearr;"
+                */
+                    if ( sort == "nameAtt" ){
+                        return (aVal>bVal? 1:-1)
+                    }else if( sort == "yearAtt" || sort == "durationAtt" ){
+                        return bVal-aVal
+                    }
+
+                /*}else if( choice.classList.contains("DESC") ){
+
+                    choice.classList.add("ASC")
+                    choice.classList.remove("DESC")
+                    choice.innerHTML = "&searr;"
+
+                    if ( sort == "nameAtt" ){
+                        return (aVal<bVal? 1:-1)
+                    }else if( sort == "yearAtt" || sort == "durationAtt" ){
+                        return bVal-aVal
+                    }
+                }*/        
+            })
+            newGallery.forEach( item =>{
+            gallery.appendChild(item)
+            })
+        })
+    })
     </script>
 {% endblock %}
 
 {% block body %}
-    <section class="gallery">
-        {% for game in games %}
-        <div class="itemCard" data-link="/game/details/{{game.id}}">
-            <figure>
-                <img src={{game.image}} alt={{game.title}}>
-            </figure>
-             <p class="title banner">{{game.title}}</p>
+    <section class="container sortGallery">
+        <div class="orderBy">
+            <p>Trier par :&nbsp;</p>
+            <p class="order" id="year">Année de sortie<span class="orderChoice ASC"> &searr;</span></p>
+            <p class="order" id="name">Nom<span class="orderChoice ASC"> &searr;</span></p>
+            <p class="order" id="duration">Durée<span class="orderChoice ASC"> &searr;</span></p>
         </div>
-        {% endfor %}
+        <div class="showOnly">
+        </div>
+        <div class="gallery">
+            {% for game in games %}
+            <div class="itemCard"
+                data-year={{game.yearOut}}
+                data-name={{game.title|slug()}}
+                data-duration={{game.duration}}
+                data-playerMin={{game.playerMin}}
+                data-playerMax={{game.playerMax}}
+                data-link="/game/details/{{game.id}}"
+            >
+                <figure>
+                    <img src={{game.image}} alt={{game.title}}>
+                </figure>
+                <p class="title banner">{{game.title}}<br>({{game.yearOut}})</p>
+            </div>
+            {% endfor %}
+        </div>
     </section>
 {% endblock %}

@@ -67,6 +67,9 @@ a{
     color: var(--main-xxdark);
     font-weight: bold;
 }
+a:focus{
+    outline: none;
+}
 ul{
     list-style: none;
     margin-left: 0;
@@ -94,6 +97,11 @@ div.flashMessage{
 }
 .flashMessage.alert{
     color: var(--main-xdark);
+}
+.container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 /*=========================================
     Header / Menu
@@ -210,7 +218,7 @@ p.banner{
     height: 2px;
     transition: transform 0.3s;
 }
-.homePannel a:hover:after{
+.homePannel a:hover:after, a:focus:after{
     transform: scaleX(1);
 }
 .homeChoice{
@@ -252,6 +260,25 @@ p.banner{
 /*=========================================
     Affichage des cards de jeux
 =========================================*/
+.orderBy{
+    display: flex;
+    margin: -1em 0 auto;
+    width: fit-content;
+    align-self: flex-end;
+    align-items: center;
+}
+.order{
+    display: inline-block;
+    margin: 5px;
+}
+.order:hover{
+    text-decoration: underline;
+    font-weight: 600;
+}
+.orderChoice{
+    font-size: 1.2em;
+    display: none;
+}
 .gallery{
     width: 100%;
     display: grid;
@@ -336,7 +363,7 @@ figure figcaption{
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    width: 80%;
+    width: fit-content;
     margin-bottom: 1.3em;
 }
 .contentList{
@@ -753,13 +780,16 @@ footer p{
 =========================================*/
 @media only screen and (max-width: 850px){
     .gallery{
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
     .multiform{
         flex-wrap: wrap;
     }
 }
 @media only screen and (max-width: 650px) {
+    .gallery{
+        grid-template-columns: repeat(3, 1fr);
+    }
     .desktop{
         display: none;
     }
